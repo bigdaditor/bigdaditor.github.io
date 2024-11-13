@@ -2,52 +2,29 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>No CSS Roadmap</title>
-    <script type="module">
-        import {tree, hierarchy, select, stratify} from "https://cdn.jsdelivr.net/npm/d3@7/+esm";
-
-        const data = [];
-        data[0] = {'parent':'','name':'실수'};
-        data[1] = {'parent':'실수','name':'유리수'};
-        data[2] = {'parent':'실수','name':'무리수'};
-        data[3] = {'parent':'유리수','name':'정수'};
-        data[4] = {'parent':'정수','name':'양의 정수'};
-        data[5] = {'parent':'정수','name':'음의 정수'};
-        data[5] = {'parent':'정수','name':'0'};
-        data[6] = {'parent':'무리수','name':'대수적 무리수'};
-        data[7] = {'parent':'무리수','name':'초월적 무리수'};
-
-        const rootNode = stratify()
-            .id(data => data.name)
-            .parentId(data => data.parent)(data);
-
-        let svg = select('body')
-            .append('svg')
-            .attr('width', '100%')
-            .attr('height', '100%')
-            .attr('viewBox', '0 0 600 350')
-            .append('g')
-            .attr('transform', 'translate(0,80)');
-
-        const treemap = tree().size([600, 320]);
-        const treeData = treemap(rootNode);
-
-        console.log(treeData);
-
-        const nodes = svg
-            .selectAll('g.node')
-            .data(treeData.descendants())
-
-        const enterNodes = nodes
-            .enter()
-            .append('g')
-            .attr('class', 'node')
-            .attr('transform', d => `translate(${d.x}, ${d.y})`);
-
-        enterNodes.append('text')
-            .text(d => d.data.name)
-    </script>
-</head>
+    <title>Tech 로드맵</title>
 <body>
+    <h1>Tech 로드맵</h1>
+    <hr>
+    <ol>
+        <li>
+            <h2>CS</h2>
+            <hr>
+            <ol>
+                <li>
+                    <a href="https://bigdaditor.github.io/cs/data-structure.html">자료구조
+                </li>
+                <li>알고리즘</li>
+            </ol>
+        </li>
+        <li>
+            <h2>Programming Language</h2>
+            <hr>
+            <ol>
+                <li>Java</li>
+                <li>Python</li>
+            </ol>
+        </li>
+    </ol>
 </body>
 </html>
