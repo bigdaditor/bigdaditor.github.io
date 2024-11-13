@@ -4,9 +4,9 @@
     <meta charset="UTF-8">
     <title>No CSS Roadmap</title>
     <script type="module">
-        import * as d3 from "https://cdn.jsdelivr.net/npm/d3@7/+esm";
+        import {tree, hierarchy, select, stratify, event} from "https://cdn.jsdelivr.net/npm/d3@7/+esm";
 
-        let data = [];
+        const data = [];
         data[0] = {'parent':'','name':'실수'};
         data[1] = {'parent':'실수','name':'유리수'};
         data[2] = {'parent':'실수','name':'무리수'};
@@ -16,9 +16,42 @@
         data[5] = {'parent':'정수','name':'0'};
         data[6] = {'parent':'무리수','name':'대수적 무리수'};
         data[7] = {'parent':'무리수','name':'초월적 무리수'};
+
+        const rootNode = stratify()
+            .id(data => data.name)
+            .parentId(data => data.parent)(data);
+
+        let svg = select('body')
+            .append('svg')
+            .attr('width', '100%')
+            .attr('height', '100%')
+            .attr('viewBox', '0 0 600 350')
+            .append('g')
+            .attr('transform', 'translate(0,80)');
+
+        const treemap = tree().size([600, 320]);
+        const treeData = treemap(rootNode);
+
+        console.log(treeData);
+
+        const nodes = svg
+            .selectAll('g.node')
+            .data(treeData.descendants())
+
+        const enterNodes = nodes
+            .enter()
+            .append('g')
+            .attr('class', 'node')
+            .attr('transform', d => `translate(${d.x}, ${d.y})`);
+
+        enterNodes.append('text')
+            .text(d => d.data.name)
+
+        svg.on('pointerdown', () => {
+            svg.style('backgroundColor', 'black');
+        })
     </script>
 </head>
 <body>
-No CSS!!
 </body>
 </html>
