@@ -6,6 +6,27 @@
     <script type="module">
         import {tree, select, stratify, linkVertical, zoom} from "https://cdn.jsdelivr.net/npm/d3@7/+esm";
 
+        const svg = select('body')
+            .append('svg')
+            .attr('width', '100%')
+            .attr('height', '100%')
+            .attr('viewBox', '0 0 600 350');
+
+        const zoomG = svg
+            .append('g')
+
+        const g = zoomG
+            .append('g')
+            .attr('transform', 'translate(10,0)')
+
+        const treeLayout = tree().size([600,600]);
+
+        svg.call(
+            zoom().on('zoom', ({transform}) => {
+                zoomG.attr('transform', transform);
+            })
+        )
+
         const data = [];
         data[0] = {'parent':'','name':'Tech'};
         data[1] = {'parent':'Tech','name':'유리수'};
@@ -17,37 +38,13 @@
         data[6] = {'parent':'무리수','name':'대수적 무리수'};
         data[7] = {'parent':'무리수','name':'초월적 무리수'};
 
-        const rootNode = stratify()
+        const root = stratify()
             .id(data => data.name)
             .parentId(data => data.parent)(data);
 
-        let svg = select('body')
-            .append('svg')
-            .attr('width', '100%')
-            .attr('height', '100%')
-            .attr('viewBox', '0 0 600 500')
-            .append('g')
-            .attr('transform', 'translate(0,80)');
-
-        const treemap = tree().size([600, 400]);
-        const treeData = treemap(rootNode);
-        const links = treeData.links();
-        const linksGenerator = linkVertical()
-            .x(d => d.x)
-            .y(d => d.y);
-
-        svg
-            .selectAll('path')
-            .data(links)
-            .enter()
-            .append('path')
-            .attr('d', linksGenerator)
-            .attr('fill', 'none')
-            .attr('stroke', 'black')
-
-        const nodes = svg
+        const nodes = g
             .selectAll('g.node')
-            .data(treeData.descendants())
+            .data(treeLayout(root).descendants())
 
         const enterNodes = nodes
             .enter()
@@ -55,28 +52,24 @@
             .attr('class', 'node')
             .attr('transform', d => `translate(${d.x}, ${d.y})`);
 
+        const links = treeLayout(root).links();
+        const linksGenerator = linkVertical()
+            .x(d => d.x)
+            .y(d => d.y);
+
+        g.selectAll('path')
+            .data(links)
+            .enter()
+            .append('path')
+            .attr('d', linksGenerator)
+            .attr('fill', 'none')
+            .attr('stroke', 'black')
+
+
         enterNodes
             .append('text')
             .text(d => d.data.name)
             .attr('text-anchor', 'middle')
-
-        const zoomG = svg.append('g');
-
-       /* enterNodes
-            .append('rect')
-            .attr("fill", "#aaa")
-            .attr("stroke", "#555")
-            .attr("stroke-width", 5)
-            .attr("width", d => d.data.name.length * 20)
-            .attr("height", d => 50)*/
-
-        svg.call(
-            zoom().on('zoom', ({transform}) => {
-                zoomG.attr('transform', transform);
-            })
-        );
-
-
     </script>
 </head>
 <body>
