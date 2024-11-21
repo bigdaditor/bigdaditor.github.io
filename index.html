@@ -4,12 +4,12 @@
     <meta charset="UTF-8">
     <title>No CSS Roadmap</title>
     <script type="module">
-        import {tree, hierarchy, select, stratify, event} from "https://cdn.jsdelivr.net/npm/d3@7/+esm";
+        import {tree, select, stratify, linkVertical, zoom} from "https://cdn.jsdelivr.net/npm/d3@7/+esm";
 
         const data = [];
-        data[0] = {'parent':'','name':'실수'};
-        data[1] = {'parent':'실수','name':'유리수'};
-        data[2] = {'parent':'실수','name':'무리수'};
+        data[0] = {'parent':'','name':'Tech'};
+        data[1] = {'parent':'Tech','name':'유리수'};
+        data[2] = {'parent':'Tech','name':'무리수'};
         data[3] = {'parent':'유리수','name':'정수'};
         data[4] = {'parent':'정수','name':'양의 정수'};
         data[5] = {'parent':'정수','name':'음의 정수'};
@@ -25,14 +25,25 @@
             .append('svg')
             .attr('width', '100%')
             .attr('height', '100%')
-            .attr('viewBox', '0 0 600 350')
+            .attr('viewBox', '0 0 600 500')
             .append('g')
             .attr('transform', 'translate(0,80)');
 
-        const treemap = tree().size([600, 320]);
+        const treemap = tree().size([600, 400]);
         const treeData = treemap(rootNode);
+        const links = treeData.links();
+        const linksGenerator = linkVertical()
+            .x(d => d.x)
+            .y(d => d.y);
 
-        console.log(treeData);
+        svg
+            .selectAll('path')
+            .data(links)
+            .enter()
+            .append('path')
+            .attr('d', linksGenerator)
+            .attr('fill', 'none')
+            .attr('stroke', 'black')
 
         const nodes = svg
             .selectAll('g.node')
@@ -44,12 +55,28 @@
             .attr('class', 'node')
             .attr('transform', d => `translate(${d.x}, ${d.y})`);
 
-        enterNodes.append('text')
+        enterNodes
+            .append('text')
             .text(d => d.data.name)
+            .attr('text-anchor', 'middle')
 
-        svg.on('pointerdown', () => {
-            svg.style('backgroundColor', 'black');
-        })
+        const zoomG = svg.append('g');
+
+       /* enterNodes
+            .append('rect')
+            .attr("fill", "#aaa")
+            .attr("stroke", "#555")
+            .attr("stroke-width", 5)
+            .attr("width", d => d.data.name.length * 20)
+            .attr("height", d => 50)*/
+
+        svg.call(
+            zoom().on('zoom', ({transform}) => {
+                zoomG.attr('transform', transform);
+            })
+        );
+
+
     </script>
 </head>
 <body>
