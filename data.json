@@ -1,0 +1,43 @@
+{
+  "name": "Tech Tree",
+  "icon": "1",
+  "children": [
+    {
+      "name": "Languages",
+      "icon": "2",
+      "children": [
+        {
+          "name": "Python",
+          "icon": "3",
+          "children": [
+            {
+              "name": "FastAPI"
+            }
+          ]
+        },
+        {
+          "name": "Java",
+          "icon": "4"
+        },
+        {
+          "name": "Go",
+          "icon": "5"
+        }
+      ]
+    },
+    {
+      "name": "RDBMS",
+      "children": [
+        {
+          "name": "MySQL"
+        },
+        {
+          "name": "Oracle"
+        },
+        {
+          "name": "SQLServer"
+        }
+      ]
+    }
+  ]
+}

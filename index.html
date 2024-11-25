@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <title>No CSS Roadmap</title>
     <script type="module">
-        import {tree, select, stratify, linkVertical, zoom} from "https://cdn.jsdelivr.net/npm/d3@7/+esm";
+        import {tree, select, hierarchy, linkVertical, zoom, json} from "https://cdn.jsdelivr.net/npm/d3@7/+esm";
 
         const svg = select('body')
             .append('svg')
@@ -14,6 +14,7 @@
 
         const zoomG = svg
             .append('g')
+            .attr('transform', 'translate')
 
         const g = zoomG
             .append('g')
@@ -27,49 +28,37 @@
             })
         )
 
-        const data = [];
-        data[0] = {'parent':'','name':'Tech'};
-        data[1] = {'parent':'Tech','name':'유리수'};
-        data[2] = {'parent':'Tech','name':'무리수'};
-        data[3] = {'parent':'유리수','name':'정수'};
-        data[4] = {'parent':'정수','name':'양의 정수'};
-        data[5] = {'parent':'정수','name':'음의 정수'};
-        data[5] = {'parent':'정수','name':'0'};
-        data[6] = {'parent':'무리수','name':'대수적 무리수'};
-        data[7] = {'parent':'무리수','name':'초월적 무리수'};
+        json('data.json').then(data => {
+            const root = hierarchy(data);
 
-        const root = stratify()
-            .id(data => data.name)
-            .parentId(data => data.parent)(data);
+            const nodes = g
+                .selectAll('g.node')
+                .data(treeLayout(root).descendants())
 
-        const nodes = g
-            .selectAll('g.node')
-            .data(treeLayout(root).descendants())
+            const enterNodes = nodes
+                .enter()
+                .append('g')
+                .attr('class', 'node')
+                .attr('transform', d => `translate(${d.x}, ${d.y})`);
 
-        const enterNodes = nodes
-            .enter()
-            .append('g')
-            .attr('class', 'node')
-            .attr('transform', d => `translate(${d.x}, ${d.y})`);
+            const links = treeLayout(root).links();
+            const linksGenerator = linkVertical()
+                .x(d => d.x)
+                .y(d => d.y);
 
-        const links = treeLayout(root).links();
-        const linksGenerator = linkVertical()
-            .x(d => d.x)
-            .y(d => d.y);
+            g.selectAll('path')
+                .data(links)
+                .enter()
+                .append('path')
+                .attr('d', linksGenerator)
+                .attr('fill', 'none')
+                .attr('stroke', 'black')
 
-        g.selectAll('path')
-            .data(links)
-            .enter()
-            .append('path')
-            .attr('d', linksGenerator)
-            .attr('fill', 'none')
-            .attr('stroke', 'black')
-
-
-        enterNodes
-            .append('text')
-            .text(d => d.data.name)
-            .attr('text-anchor', 'middle')
+            enterNodes
+                .append('text')
+                .text(d => d.data.name)
+                .attr('text-anchor', 'middle')
+        })
     </script>
 </head>
 <body>
