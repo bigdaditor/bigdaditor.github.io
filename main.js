@@ -1,38 +1,37 @@
-document.addEventListener("DOMContentLoaded", () => {
-  const terminal = document.querySelector(".terminal");
-  const commands = {
-      help: () => {
+const terminal = document.querySelector(".terminal");
+const commands = {
+    help: () => {
         const output = document.createElement("div");
         output.textContent = "Available commands:\n - clear\n - help\n - ls";
         terminal.appendChild(output);
         createPromptLine();
-      },
-      clear: () => {
+    },
+    clear: () => {
         terminal.innerHTML = "";
         createPromptLine();
-      },
-      ls: () => {
+    },
+    ls: () => {
         fetch('https://api.github.com/repos/bigdaditor/bigdaditor.github.io/contents/')
-          .then(response => response.json())
-          .then(data => {
-            const output = document.createElement("div");
-            output.className = "ls-output";
+            .then(response => response.json())
+            .then(data => {
+                const output = document.createElement("div");
+                output.className = "ls-output";
 
-            const list = data.map(item => `${item.name}${item.type === 'dir' ? '/' : ''}`).join('\n');
-            output.innerHTML = list.replace(/\n/g, "<br>") || "(empty)";
-            terminal.appendChild(output);
-            createPromptLine();
-          })
-          .catch(err => {
-            const error = document.createElement("div");
-            error.textContent = `ls failed: ${err}`;
-            terminal.appendChild(error);
-            createPromptLine();
-          });
-      }
-  }
+                const list = data.map(item => `${item.name}${item.type === 'dir' ? '/' : ''}`).join('\n');
+                output.innerHTML = list.replace(/\n/g, "<br>") || "(empty)";
+                terminal.appendChild(output);
+                createPromptLine();
+            })
+            .catch(err => {
+                const error = document.createElement("div");
+                error.textContent = `ls failed: ${err}`;
+                terminal.appendChild(error);
+                createPromptLine();
+            });
+    }
+}
 
-  function createBlogIntro() {
+function createBlogIntro() {
     const intro = document.createElement("div");
     intro.className = "blog-intro";
 
@@ -52,9 +51,9 @@ __        __   _                            _
     intro.appendChild(pre);
     intro.appendChild(desc);
     terminal.appendChild(intro);
-  }
+}
 
-  function createPromptLine() {
+function createPromptLine() {
     const line = document.createElement("div");
     line.className = "prompt-line";
 
@@ -84,34 +83,36 @@ __        __   _                            _
     input.focus();
 
     input.addEventListener("keydown", (e) => {
-      if (e.key === "Enter") {
-        const cmd = input.value.trim();
-        input.disabled = true;
-        handleCommand(cmd);
-      }
+        if (e.key === "Enter") {
+            const cmd = input.value.trim();
+            input.disabled = true;
+            handleCommand(cmd);
+        }
     });
-  }
+}
 
-  function handleCommand(cmd) {
+
+function handleCommand(cmd) {
     if (cmd === "") {
-      createPromptLine();
-      return;
+        createPromptLine();
+        return;
     }
 
     if (commands[cmd]) {
-      commands[cmd]();
+        commands[cmd]();
     } else {
-      const output = document.createElement("div");
-      output.textContent = `command not found: ${cmd}`;
-      terminal.appendChild(output);
-      createPromptLine();
+        const output = document.createElement("div");
+        output.textContent = `command not found: ${cmd}`;
+        terminal.appendChild(output);
+        createPromptLine();
     }
 
     window.scrollTo(0, document.body.scrollHeight);
-  }
+}
 
-  // Start terminal
-  terminal.innerHTML = "";
-  createBlogIntro();
-  createPromptLine();
+document.addEventListener("DOMContentLoaded", () => {
+    // Start terminal
+    terminal.innerHTML = "";
+    createBlogIntro();
+    createPromptLine();
 });
