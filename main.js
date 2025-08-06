@@ -1,8 +1,35 @@
 document.addEventListener("DOMContentLoaded", () => {
   const terminal = document.querySelector(".terminal");
   const commands = {
-      help: "Available commands:\n - clear\n - help",
-      clear: "__clear__"
+      help: () => {
+        const output = document.createElement("div");
+        output.textContent = "Available commands:\n - clear\n - help\n - ls";
+        terminal.appendChild(output);
+        createPromptLine();
+      },
+      clear: () => {
+        terminal.innerHTML = "";
+        createPromptLine();
+      },
+      ls: () => {
+        fetch('https://api.github.com/repos/bigdaditor/bigdaditor.github.io/contents/')
+          .then(response => response.json())
+          .then(data => {
+            const output = document.createElement("div");
+            output.className = "ls-output";
+
+            const list = data.map(item => `${item.name}${item.type === 'dir' ? '/' : ''}`).join('\n');
+            output.innerHTML = list.replace(/\n/g, "<br>") || "(empty)";
+            terminal.appendChild(output);
+            createPromptLine();
+          })
+          .catch(err => {
+            const error = document.createElement("div");
+            error.textContent = `ls failed: ${err}`;
+            terminal.appendChild(error);
+            createPromptLine();
+          });
+      }
   }
 
   function createBlogIntro() {
@@ -72,15 +99,7 @@ __        __   _                            _
     }
 
     if (commands[cmd]) {
-      if (commands[cmd] === "__clear__") {
-        terminal.innerHTML = "";
-        createPromptLine();
-      } else {
-        const output = document.createElement("div");
-        output.textContent = commands[cmd];
-        terminal.appendChild(output);
-        createPromptLine();
-      }
+      commands[cmd]();
     } else {
       const output = document.createElement("div");
       output.textContent = `command not found: ${cmd}`;
