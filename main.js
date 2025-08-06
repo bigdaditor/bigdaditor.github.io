@@ -1,5 +1,3 @@
-
-
 document.addEventListener("DOMContentLoaded", () => {
   const terminal = document.querySelector(".terminal");
   const commands = {
@@ -11,6 +9,28 @@ document.addEventListener("DOMContentLoaded", () => {
       "Stay tuned!"
     ].join("\n")
   };
+
+  function createBlogIntro() {
+    const intro = document.createElement("div");
+    intro.className = "blog-intro";
+
+    const pre = document.createElement("pre");
+    pre.className = "ascii-welcome";
+    pre.textContent = `
+__        __   _                            _         
+\\ \\      / /__| | ___ ___  _ __ ___   ___  | |_ ___    
+ \\ \\ /\\ / / _ \\ |/ __/ _ \\| '_ \` _ \\ / _ \\ | __/ _ \\   
+  \\ V  V /  __/ | (_| (_) | | | | | |  __/ | || (_) |  
+   \\_/\\_/ \\___|_|\\___\\___/|_| |_| |_|\\___|  \\__\\___/   
+`;
+
+    const desc = document.createElement("p");
+    desc.innerHTML = 'This is the terminal-style blog of <strong>bigdaditor</strong>. Type <code>help</code> to get started!';
+
+    intro.appendChild(pre);
+    intro.appendChild(desc);
+    terminal.appendChild(intro);
+  }
 
   function createPromptLine() {
     const line = document.createElement("div");
@@ -78,5 +98,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // Start terminal
   terminal.innerHTML = "";
+  createBlogIntro();
   createPromptLine();
 });

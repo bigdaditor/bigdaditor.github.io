@@ -20,6 +20,17 @@ body {
     margin-right: 250px;
 }
 
+.blog-intro {
+    margin-bottom: 2rem;
+    color: #81a2be;
+}
+
+.ascii-welcome {
+    font-size: 0.8rem;
+    line-height: 1.2;
+    color: #b5bd68;
+}
+
 .prompt {
     color: #b5bd68;
     margin-bottom: 1rem;
@@ -107,7 +118,7 @@ body {
     display: flex;
     align-items: center;
     gap: 0.3rem;
-    margin-top: 1rem;
+    margin-top: 0.5rem;
 }
 
 /* Scrollbar Styling */
