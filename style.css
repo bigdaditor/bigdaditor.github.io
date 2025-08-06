@@ -8,13 +8,16 @@ body {
 
 .container {
     display: flex;
-    min-height: 100vh;
+    height: 100vh;
+    overflow: hidden;
 }
 
 .terminal {
     flex: 1;
     padding: 2rem;
     border-right: 1px solid #333;
+    overflow-y: auto;
+    margin-right: 250px;
 }
 
 .prompt {
@@ -31,9 +34,11 @@ body {
     background-color: #2d2d2d;
     padding: 1rem;
     border-left: 1px solid #333;
-    position: sticky;
-    top: 0;
     height: 100vh;
+    overflow-y: auto;
+    position: fixed;
+    right: 0;
+    top: 0;
 }
 
 .sidebar h2 {
@@ -88,9 +93,44 @@ body {
     outline: none;
 }
 
+.terminal-input {
+  background: transparent;
+  border: none;
+  color: #c5c8c6;
+  font-family: 'Courier New', monospace;
+  font-size: 1em;
+  width: 80%;
+  outline: none;
+}
+
 .prompt-line {
     display: flex;
     align-items: center;
     gap: 0.3rem;
     margin-top: 1rem;
+}
+
+/* Scrollbar Styling */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: rgba(255, 255, 255, 0.2);
+  border-radius: 4px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background-color: rgba(255, 255, 255, 0.4);
+}
+
+/* Firefox */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.2) transparent;
 }
