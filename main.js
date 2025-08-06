@@ -1,14 +1,9 @@
 document.addEventListener("DOMContentLoaded", () => {
   const terminal = document.querySelector(".terminal");
   const commands = {
-    help: "Available commands:\n - cat latest-post.txt\n - clear\n - help",
-    clear: "__clear__",
-    "cat latest-post.txt": [
-      "Welcome to my Terminal Blog.",
-      "This is where I post my thoughts, ideas, and code experiments.",
-      "Stay tuned!"
-    ].join("\n")
-  };
+      help: "Available commands:\n - clear\n - help",
+      clear: "__clear__"
+  }
 
   function createBlogIntro() {
     const intro = document.createElement("div");
@@ -25,7 +20,7 @@ __        __   _                            _
 `;
 
     const desc = document.createElement("p");
-    desc.innerHTML = 'This is the terminal-style blog of <strong>bigdaditor</strong>. Type <code>help</code> to get started!';
+    desc.innerHTML = 'This is the blog of <strong>bigdaditor</strong>. Type <code>help</code> to get started!';
 
     intro.appendChild(pre);
     intro.appendChild(desc);
