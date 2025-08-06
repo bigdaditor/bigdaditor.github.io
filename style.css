@@ -64,6 +64,11 @@ body {
     padding: 0;
 }
 
+.sidebar ul ul {
+    margin-top: 1rem;
+    padding-left: 1.2rem;
+}
+
 .sidebar li {
     margin-bottom: 1rem;
 }
