@@ -1,0 +1,221 @@
+{
+  "about": "https://www.notion.so/236b4d07a2fa80838086cbf083e7bb7b?source=copy_link",
+  "notice": [
+    {
+      "author": "이종화",
+      "link": "https://www.notion.so/native/2365c49adba280da807dd6e02e43926a"
+    },
+    {
+      "author": "이다영",
+      "link": "https://www.notion.so/236b4d07a2fa80e09f39e4a80bcdf23b?source=copy_link"
+    },
+    {
+      "author": "민호",
+      "link": "https://gist.github.com/miinhho/c285ce087dc4dd33814fab8951c58c98"
+    },
+    {
+      "author": "김유석",
+      "link": "https://www.notion.so/237b4d07a2fa80f494b6fcc388c5a05d"
+    },
+    {
+      "author": "HC-kang|강희찬",
+      "link": "https://www.notion.so/237bcc0da226805bbcb5d17315c6e36a?source=copy_link"
+    },
+    {
+      "author": "빅-데디터",
+      "link": "https://data-edit.tistory.com/entry/0-글쓰기-선언문"
+    },
+    {
+      "author": "녕지",
+      "link": "https://www.notion.so/23bb4d07a2fa80369e6bcc0a51c24b56"
+    },
+    {
+      "author": "리브",
+      "link": "https://www.notion.so/23bb4d07a2fa805f9ed3d398cb53a349?source=copy_link"
+    }
+  ],
+  "week1": [
+    {
+      "author": "민호",
+      "link": [
+        "https://velog.io/@miinhho/오픈소스-기여-중-겪었던-마이그레이션-이야기-feat.-Yorkie",
+        "https://velog.io/@miinhho/중복-토큰-재발급-요청으로-백엔드에-부담을-줘볼까요",
+        "https://velog.io/@miinhho/React-Design-Pattern"
+      ]
+    },
+    {
+      "author": "한비(BIBI)",
+      "link": [
+        "https://www.linkedin.com/posts/hanbi-kwon_우리는-왜-자기소개조차-못하는가-나라는-제품-설명서-만들기-워크북-activity-7353309311365758976-ZfFo?utm_source=share&utm_medium=member_ios&rcm=ACoAACaQ7qcBRIbIm8Nv3MfNSFWeaMiEams68gU"
+      ]
+    },
+    {
+      "author": "HC-kang | 강희찬",
+      "link": [
+        "https://www.linkedin.com/posts/heechan-kang-3384b1213_중앙선을-보면서-든-생각-최근에-2차선-도로를-운전하다가-문득-이런-생각이-activity-7353946069229043712-jsCQ?utm_source=share&utm_medium=member_ios&rcm=ACoAADYAI5wB8XeQwxp7hldqJcXlqWOuRXy_tgc",
+        "https://velog.io/@hc-kang/왜-비오는날-인터넷이-느려지지",
+        "https://velog.io/@hc-kang/토스의-기가막힌-문서-시스템-실패에서-배운-교훈들"
+      ]
+    },
+    {
+      "author": "택준",
+      "link": [
+        "https://velog.io/@kimtaekjun/React-Native-카카오맵-API를-활용한-위치-기반-서비스-구현"
+      ]
+    },
+    {
+      "author": "Kay",
+      "link": [
+        "https://shorturl.at/qYQxK",
+        "https://shorturl.at/WaXvt",
+        "https://shorturl.at/haJjj"
+      ]
+    },
+    {
+      "author": "nori",
+      "link": [
+        "https://ironpark.github.io/blog/my-ideal-dev-blog"
+      ]
+    },
+    {
+      "author": "빅-데디터",
+      "link": "https://data-edit.tistory.com/entry/어떻게"
+    },
+    {
+      "author": "이다영",
+      "link": [
+        "https://youngdalee.github.io/posts/GDC25/"
+      ]
+    },
+    {
+      "author": "이종화",
+      "link": [
+        "https://gran007.tistory.com/entry/vue-설치-및-신규-프로젝트-생성",
+        "https://gran007.tistory.com/entry/nextjs-vercel에-배포하기",
+        "https://gran007.tistory.com/entry/React-React와-jQuery-방식-비교",
+        "https://gran007.tistory.com/entry/Kotlin-Spring-프로젝트-생성-MySQL-JPA-연동",
+        "https://gran007.tistory.com/entry/kotlin-Spring-CRUD-Rest-API-구현-JPA-테이블-연동",
+        "https://gran007.tistory.com/entry/kotlin-spring-API-호출을-위한-Postman",
+        "https://gran007.tistory.com/entry/kotlin-spring-HTTP-사용방법",
+        "https://gran007.tistory.com/entry/kotlin-spring-SpringBootTest-H2-테스트-환경-구성"
+      ]
+    },
+    {
+      "author": "김유석",
+      "link": [
+        "https://blog.naver.com/yuseok9808/223949175829"
+      ]
+    }
+  ],
+  "week2": [
+    {
+      "author": "HC-kang | 강희찬",
+      "link": [
+        "https://velog.io/@hc-kang/토스-메이커스-컨퍼런스-25#20년-레거시를-넘어-미래를-준비하는-시스템-만들기",
+        "https://velog.io/@hc-kang/도커쿠버네티스-스터디-2일차",
+        "https://velog.io/@hc-kang/HTTP는-왜-이렇게-생겼을까-톺아보기"
+      ]
+    },
+    {
+      "author": "한비(BIBI)",
+      "link": [
+        "https://www.linkedin.com/posts/hanbi-kwon_누구-덕인지-모른다면-아직-멀었다-꽤-오랫동안-나는-혼자-힘으로-activity-7355751614671998976-eTPB"
+      ]
+    },
+    {
+      "author": "미스터Q",
+      "link": [
+        "https://misterq.tistory.com/7",
+        "https://misterq.tistory.com/8"
+      ]
+    },
+    {
+      "author": "미스터Q",
+      "link": [
+        "https://misterq.tistory.com/7"
+      ]
+    },
+    {
+      "author": "민호",
+      "link": [
+        "https://velog.io/@miinhho/NestJS-Interceptor가-Observable을-강제하는-AOP-설계-철학",
+        "https://velog.io/@miinhho/NestJS-AOP를-활용한-Prisma-에러-처리-리팩토링"
+      ]
+    },
+    {
+      "author": "빅-데디터",
+      "link": [
+        "https://data-edit.tistory.com/entry/GitHub-Issues-1-Issue-Project-생성부터-세팅까지"
+      ]
+    },
+    {
+      "author": "이종화",
+      "link": [
+        "https://gran007.tistory.com/entry/React-페이지-새로고침시마다-스크롤-위치-리셋",
+        "https://gran007.tistory.com/entry/css-tailwindcss에서-사용하는-rem-이란",
+        "https://gran007.tistory.com/entry/kotlinspring-specification-사용의-필요성과-사용예시",
+        "https://gran007.tistory.com/entry/kotlinspring-Specification을-사용한-동적-검색-API-개발",
+        "https://gran007.tistory.com/entry/CSS-backdrop-filter-속성",
+        "https://gran007.tistory.com/entry/css-linear-gradient",
+        "https://gran007.tistory.com/entry/CSS-shadow-box",
+        "https://gran007.tistory.com/entry/css-반응형-웹페이지-만들기-media-query",
+        "https://gran007.tistory.com/entry/css-transition",
+        "https://gran007.tistory.com/entry/CSS-animation과-keyframe",
+        "https://gran007.tistory.com/entry/React-스크롤-반응형-애니메이션-웹-페이지-구축",
+        "https://gran007.tistory.com/entry/React-자주-사용하는-hook들-useState-useEffect-useRef",
+        "https://gran007.tistory.com/entry/NestJS-프로젝트-생성",
+        "https://gran007.tistory.com/entry/NestJS-데코레이터decorator-패턴"
+      ]
+    },
+    {
+      "author": "Kay",
+      "link": [
+        "https://www.notion.so/Conveyd-23bdd59fdf5e8087be5fff718c6aafd2?source=copy_link",
+        "https://www.notion.so/Conveyd-Weekly-Founder-Log-23bdd59fdf5e804c8d72cde3886c2239?source=copy_link",
+        "https://www.notion.so/23bdd59fdf5e80bab941f37dcb5bb76c?source=copy_link"
+      ]
+    },
+    {
+      "author": "김유석",
+      "link": [
+        "https://blog.naver.com/yuseok9808/223957708617",
+        "https://github.com/yuseok-kim-edushare/MS-SQL-Image_convert"
+      ]
+    }
+  ],
+  "week3": [
+    {
+      "author": "한비(BIBI)",
+      "link": [
+        "https://www.linkedin.com/feed/update/urn:li:activity:7357969467840090113/"
+      ]
+    },
+    {
+      "author": "재재",
+      "link": [
+        "https://www.linkedin.com/pulse/%EA%BE%B8%EC%94%81-%ED%81%B4-%EA%BE%B8%EC%A4%80%ED%9E%88-%EC%94%81%EC%8B%9C%EB%8B%A4-%ED%81%B4%EB%9F%BD%EC%97%90-%EC%B0%B8%EC%97%AC%ED%95%98%EB%A9%B0-jaeyun-yu-sojpc/"
+      ]
+    },
+    {
+      "author": "이종화",
+      "link": [
+        "https://gran007.tistory.com/entry/NestJS-TypeORM-관계설정-ManyToOne-OneToMany-관계-데이터-일괄-삽입",
+        "https://gran007.tistory.com/entry/NestJS-구글-소셜-로그인-OAuth2로-JWT-발급",
+        "https://gran007.tistory.com/entry/NestJS-passport-jwt-전략으로-JWT-AuthGuard-구성"
+      ]
+    },
+    {
+      "author": "민호",
+      "link": [
+        "https://velog.io/@miinhho/Redis-WSL-연결-문제-해결기"
+      ]
+    },
+    {
+      "author": "택준",
+      "link": [
+        "https://velog.io/@kimtaekjun/React-Native-NestJS-카카오-모빌리티-API를-활용한-출발지도착지-예상-거리-계산-기능-구현",
+        "https://velog.io/@kimtaekjun/React-Native-SecureStore-2048바이트제한문제발생"
+      ]
+    }
+  ]
+}
