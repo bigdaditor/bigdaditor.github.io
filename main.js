@@ -2,7 +2,7 @@ const terminal = document.querySelector(".terminal");
 const commands = {
     help: () => {
         const output = document.createElement("div");
-        output.textContent = "Available commands:\n - clear\n - help\n - ls";
+        output.innerHTML = "Available commands:\n clear\n help\n ls".replace(/\n/g, "<br>") || "(empty)";
         terminal.appendChild(output);
         createPromptLine();
     },
