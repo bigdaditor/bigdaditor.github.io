@@ -201,7 +201,9 @@
       "link": [
         "https://gran007.tistory.com/entry/NestJS-TypeORM-관계설정-ManyToOne-OneToMany-관계-데이터-일괄-삽입",
         "https://gran007.tistory.com/entry/NestJS-구글-소셜-로그인-OAuth2로-JWT-발급",
-        "https://gran007.tistory.com/entry/NestJS-passport-jwt-전략으로-JWT-AuthGuard-구성"
+        "https://gran007.tistory.com/entry/NestJS-passport-jwt-전략으로-JWT-AuthGuard-구성",
+        "https://gran007.tistory.com/entry/Kotlin-Kotlin-Spring-Kafka-예제코드",
+        "https://gran007.tistory.com/entry/Kotlin-Kotlin-Spring-Redis-연동-예제"
       ]
     },
     {
@@ -216,6 +218,18 @@
         "https://velog.io/@kimtaekjun/React-Native-NestJS-카카오-모빌리티-API를-활용한-출발지도착지-예상-거리-계산-기능-구현",
         "https://velog.io/@kimtaekjun/React-Native-SecureStore-2048바이트제한문제발생"
       ]
-    }
+    },
+    {
+      "author": "HC-kang | 강희찬",
+      "link": [
+        "https://velog.io/@hc-kang/이미지를-다루어야하는-개발자들을-위한-간단한-매뉴얼"
+      ]
+    },
+    {
+      "author": "nori",
+      "link": [
+        "https://ironpark.github.io/blog/blog-auto-publishing-with-obsidian"
+      ]
+    },
   ]
 }
