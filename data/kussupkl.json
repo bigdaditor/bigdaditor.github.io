@@ -198,8 +198,18 @@
     },
     {
       "author": "이종화",
-      "link": [
-        "https://gran007.tistory.com/entry/NestJS-TypeORM-관계설정-ManyToOne-OneToMany-관계-데이터-일괄-삽입",
+      "Link": [
+        "https://gran007.tistory.com/entry/CSS-backdrop-filter-속성",
+        "https://gran007.tistory.com/entry/css-linear-gradient",
+        "https://gran007.tistory.com/entry/CSS-shadow-box",
+        "https://gran007.tistory.com/entry/css-반응형-웹페이지-만들기-media-query",
+        "https://gran007.tistory.com/entry/css-transition",
+        "https://gran007.tistory.com/entry/CSS-animation과-keyframe",
+        "https://gran007.tistory.com/entry/React-스크롤-반응형-애니메이션-웹-페이지-구축",
+        "https://gran007.tistory.com/entry/React-자주-사용하는-hook들-useState-useEffect-useRef",
+        "https://gran007.tistory.com/entry/NestJS-프로젝트-생성",
+        "https://gran007.tistory.com/entry/NestJS-데코레이터decorator-패턴",
+        "https://gran007.tistory.com/entry/NestJS-TypeORM-%EA%B4%80%EA%B3%84%EC%84%A4%EC%A0%95-ManyToOne-OneToMany-%EA%B4%80%EA%B3%84-%EB%8D%B0%EC%9D%B4%ED%84%B0-%EC%9D%BC%EA%B4%84-%EC%82%BD%EC%9E%85",
         "https://gran007.tistory.com/entry/NestJS-구글-소셜-로그인-OAuth2로-JWT-발급",
         "https://gran007.tistory.com/entry/NestJS-passport-jwt-전략으로-JWT-AuthGuard-구성",
         "https://gran007.tistory.com/entry/Kotlin-Kotlin-Spring-Kafka-예제코드",
@@ -208,9 +218,7 @@
     },
     {
       "author": "민호",
-      "link": [
-        "https://velog.io/@miinhho/Redis-WSL-연결-문제-해결기"
-      ]
+      "link": ["https://velog.io/@miinhho/Redis-WSL-연결-문제-해결기"]
     },
     {
       "author": "택준",
@@ -230,6 +238,33 @@
       "link": [
         "https://ironpark.github.io/blog/blog-auto-publishing-with-obsidian"
       ]
+    },
+    {
+      "author": "김유석",
+      "link": ["https://blog.naver.com/yuseok9808/223965851329"]
+    },
+    {
+      "author": "택준",
+      "link": [
+        "https://velog.io/@kimtaekjun/React-Native-NestJS-카카오-모빌리티-API를-활용한-출발지도착지-예상-거리-계산-기능-구현",
+        "https://velog.io/@kimtaekjun/React-Native-SecureStore-2048바이트제한문제발생"
+      ]
+    },
+    {
+      "author": "Kay",
+      "link": [
+        "https://www.notion.so/Conveyd-23bdd59fdf5e8087be5fff718c6aafd2?source=copy_link",
+        "https://www.notion.so/Conveyd-Weekly-Founder-Log-23bdd59fdf5e804c8d72cde3886c2239?source=copy_link",
+        "https://www.notion.so/23bdd59fdf5e80bab941f37dcb5bb76c?source=copy_link"
+      ]
+    },
+    {
+      "author": "리브",
+      "link": ["https://livlogs.vercel.app/blog/hackerton-retrospective"]
+    },
+    {
+      "author": "유승주",
+      "link": ["https://velog.io/@toho09/메모리-누수"]
     }
   ]
 }
