@@ -18,7 +18,7 @@
       "link": "https://www.notion.so/237b4d07a2fa80f494b6fcc388c5a05d"
     },
     {
-      "author": "HC-kang|강희찬",
+      "author": "HC-kang | 강희찬",
       "link": "https://www.notion.so/237bcc0da226805bbcb5d17315c6e36a?source=copy_link"
     },
     {
@@ -73,9 +73,7 @@
     },
     {
       "author": "nori",
-      "link": [
-        "https://ironpark.github.io/blog/my-ideal-dev-blog"
-      ]
+      "link": ["https://ironpark.github.io/blog/my-ideal-dev-blog"]
     },
     {
       "author": "빅-데디터",
@@ -83,9 +81,7 @@
     },
     {
       "author": "이다영",
-      "link": [
-        "https://youngdalee.github.io/posts/GDC25/"
-      ]
+      "link": ["https://youngdalee.github.io/posts/GDC25/"]
     },
     {
       "author": "이종화",
@@ -102,9 +98,7 @@
     },
     {
       "author": "김유석",
-      "link": [
-        "https://blog.naver.com/yuseok9808/223949175829"
-      ]
+      "link": ["https://blog.naver.com/yuseok9808/223949175829"]
     }
   ],
   "week2": [
@@ -124,16 +118,11 @@
     },
     {
       "author": "미스터Q",
-      "link": [
-        "https://misterq.tistory.com/7",
-        "https://misterq.tistory.com/8"
-      ]
+      "link": ["https://misterq.tistory.com/7", "https://misterq.tistory.com/8"]
     },
     {
       "author": "미스터Q",
-      "link": [
-        "https://misterq.tistory.com/7"
-      ]
+      "link": ["https://misterq.tistory.com/7"]
     },
     {
       "author": "민호",
@@ -265,6 +254,75 @@
     {
       "author": "유승주",
       "link": ["https://velog.io/@toho09/메모리-누수"]
+    }
+  ],
+  "week4": [
+    {
+      "author": "김유석",
+      "link": [
+        "https://blog.naver.com/yuseok9808/223973523590"
+      ]
+    },
+    {
+      "author": "택준",
+      "link": [
+        "https://velog.io/@kimtaekjun/React-Native-NestJS-애플-소셜-로그인-구현"
+      ]
+    },
+    {
+      "author": "민호",
+      "link": [
+        "https://velog.io/@miinhho/5번의-개발-스터디-운영으로-얻은-스터디-운영-꿀팁"
+      ]
+    },
+    {
+      "author": "Kay",
+      "link": [
+        "https://shorturl.at/qYQxK",
+        "https://shorturl.at/WaXvt",
+        "https://shorturl.at/haJjj"
+      ]
+    },
+    {
+      "author": "빅-데디터",
+      "link": [
+        "https://data-edit.tistory.com/entry/5년-차-개발자-현재-백수"
+      ]
+    },
+    {
+      "author": "이종화",
+      "link": [
+        "https://gran007.tistory.com/entry/React-구글-OAuth-소셜로그인-JWT-사용-프론트엔드",
+        "https://gran007.tistory.com/entry/React-ReactQuery-활용방법",
+        "https://gran007.tistory.com/entry/React-zustand를-사용한-동적-alert-창-구현",
+        "https://gran007.tistory.com/entry/ReactNestJS-JWT-자동-로그인-Token-Refresh"
+
+      ]
+    },
+    {
+      "author": "미스터Q",
+      "link": [
+        "https://misterq.tistory.com/9"
+      ]
+    },
+    {
+      "author": "리브",
+      "link": [
+        "https://livlogs.vercel.app/blog/backend/equals_hashcode"
+      ]
+    },
+    {
+      "author": "MINT(#9BFFCC)",
+      "link": [
+        "https://mintraum.tistory.com/55",
+        "https://mintraum.tistory.com/56"
+      ]
+    },
+    {
+      "author": "유승주",
+      "link": [
+        "https://velog.io/@toho09/kafka의-무중단-배포-핵심"
+      ]
     }
   ]
 }
