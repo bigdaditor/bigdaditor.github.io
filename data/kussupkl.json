@@ -259,9 +259,7 @@
   "week4": [
     {
       "author": "김유석",
-      "link": [
-        "https://blog.naver.com/yuseok9808/223973523590"
-      ]
+      "link": ["https://blog.naver.com/yuseok9808/223973523590"]
     },
     {
       "author": "택준",
@@ -285,9 +283,7 @@
     },
     {
       "author": "빅-데디터",
-      "link": [
-        "https://data-edit.tistory.com/entry/5년-차-개발자-현재-백수"
-      ]
+      "link": ["https://data-edit.tistory.com/entry/5년-차-개발자-현재-백수"]
     },
     {
       "author": "이종화",
@@ -296,20 +292,15 @@
         "https://gran007.tistory.com/entry/React-ReactQuery-활용방법",
         "https://gran007.tistory.com/entry/React-zustand를-사용한-동적-alert-창-구현",
         "https://gran007.tistory.com/entry/ReactNestJS-JWT-자동-로그인-Token-Refresh"
-
       ]
     },
     {
       "author": "미스터Q",
-      "link": [
-        "https://misterq.tistory.com/9"
-      ]
+      "link": ["https://misterq.tistory.com/9"]
     },
     {
       "author": "리브",
-      "link": [
-        "https://livlogs.vercel.app/blog/backend/equals_hashcode"
-      ]
+      "link": ["https://livlogs.vercel.app/blog/backend/equals_hashcode"]
     },
     {
       "author": "MINT(#9BFFCC)",
@@ -320,9 +311,31 @@
     },
     {
       "author": "유승주",
+      "link": ["https://velog.io/@toho09/kafka의-무중단-배포-핵심"]
+    }
+  ],
+  "week5": [
+    {
+      "author": "한비(BIBI)",
       "link": [
-        "https://velog.io/@toho09/kafka의-무중단-배포-핵심"
-      ]
+        "https://www.linkedin.com/posts/hanbi-kwon_개발자는-아니지만-기술-컨퍼런스에-갑니다-파이콘-한국-2025-자원봉사-activity-7363092616277577730-TR6I/",
+        "https://www.linkedin.com/feed/update/urn:li:activity:7365194539797577729/"]
+    },
+    {
+      "author": "김유석",
+      "link": ["https://blog.naver.com/yuseok9808/223981888559"]
+    },
+    {
+      "author": "이종화",
+      "link": ["https://gran007.tistory.com/entry/kotlinspring-외부-서버-호출-테스트를-위한-mock-서버-개발기"]
+    },
+    {
+      "author": "재재",
+      "link": ["https://velog.io/@zzae_zze/5달러-내기-싫어서-직접-만들었습니다"]
+    },
+    {
+      "author": "fake.dev",
+      "link": ["https://velog.io/@fakedev/오셀로Othello-게임-AI-8완-MCTS-최종-실험-RAVE-하이퍼파라미터-튜닝"]
     }
   ]
 }
