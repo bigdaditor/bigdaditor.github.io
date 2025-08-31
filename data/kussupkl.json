@@ -337,5 +337,44 @@
       "author": "fake.dev",
       "link": ["https://velog.io/@fakedev/오셀로Othello-게임-AI-8완-MCTS-최종-실험-RAVE-하이퍼파라미터-튜닝"]
     }
-  ]
+  ],
+  "week6": [
+    {
+      "author": "한비(BIBI)",
+      "link": [
+        "https://www.linkedin.com/feed/update/urn:li:activity:7365922768204283905/"]
+    },
+    {
+      "author": "김유석",
+      "link": ["https://blog.naver.com/yuseok9808/223990205612"]
+    },
+    {
+      "author": "택준",
+      "link": [
+        "https://velog.io/@kimtaekjun/React-Native-NestJS-카카오-소셜-로그인-구현",
+        "https://www.linkedin.com/posts/kimtaekjun_최근-제-자신을-깊이-돌아보는-시간을-가졌습니다-그-과정에서-얻은-생각의-activity-7367841402145153024-rkq"]
+    },
+    {
+      "author": "민호",
+      "link": [
+        "https://www.linkedin.com/posts/minho-jang-478299312_nodejs-chrome-브라우저-등에-쓰이는-v8-자바스크립트-엔진에선-activity-7364705699601264640-AH_2",
+        "https://www.linkedin.com/posts/minho-jang-478299312_오늘-size-limit-action을-활용해-pr마다-번들-크기-변화를-activity-7366118574299508736-NJaZ"]
+    },
+    {
+      "author": "이종화",
+      "link": ["https://gran007.tistory.com/entry/React-공식문서-학습하기-1-빠르게-시작하기"]
+    },
+    {
+      "author": "리브",
+      "link": ["https://www.linkedin.com/feed/update/urn:li:share:7366748852252569602/"]
+    },
+    {
+      "author": "MINT(#9BFFCC)",
+      "link": ["https://www.linkedin.com/feed/update/urn:li:activity:7367787899456512001/"]
+    },
+    {
+      "author": "유정",
+      "link": ["https://artistic-ring-ba9.notion.site/259478a698f38083ba4bd4d8760cfb19?source=copy_link"]
+    }
+  ]  
 }
