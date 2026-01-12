@@ -258,3 +258,41 @@ body {
 .path {
     color: #81a2be;
 }
+
+/* Cat output */
+.cat-output {
+    margin: 1rem 0;
+    padding: 1rem;
+    border-left: 2px solid #81a2be;
+}
+
+.cat-output .post-title {
+    color: #b5bd68;
+    margin: 0 0 0.5rem 0;
+}
+
+.cat-output .post-date {
+    color: #969896;
+    margin-bottom: 1rem;
+}
+
+.cat-output .post-body {
+    line-height: 1.8;
+}
+
+.cat-output pre {
+    background: #2d2d2d;
+    padding: 1rem;
+    border-radius: 4px;
+    overflow-x: auto;
+}
+
+.cat-output code {
+    background: #2d2d2d;
+    padding: 0.2rem 0.4rem;
+    border-radius: 3px;
+}
+
+.cat-output h1, .cat-output h2, .cat-output h3 {
+    color: #81a2be;
+}
