@@ -1,0 +1,15 @@
+title: bigdaditor's Blog
+description: Terminal-style tech blog
+author: bigdaditor
+url: "https://bigdaditor.github.io"
+baseurl: ""
+
+permalink: /:categories/:year/:month/:day/:title/
+
+markdown: kramdown
+highlighter: rouge
+
+exclude:
+  - README.md
+  - Gemfile
+  - Gemfile.lock

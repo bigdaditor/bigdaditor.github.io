@@ -150,3 +150,111 @@ body {
   scrollbar-width: thin;
   scrollbar-color: rgba(255, 255, 255, 0.2) transparent;
 }
+
+/* Posts List */
+.posts-list {
+    padding: 1rem 0;
+}
+
+.posts-output {
+    margin: 1rem 0;
+    padding-left: 1rem;
+}
+
+.post-entry {
+    margin: 0.5rem 0;
+}
+
+.post-entry .date {
+    color: #81a2be;
+    margin-right: 1rem;
+}
+
+.post-entry a {
+    color: #b5bd68;
+    text-decoration: none;
+}
+
+.post-entry a:hover {
+    color: #f0c674;
+    text-decoration: underline;
+}
+
+.category {
+    color: #cc6666;
+    margin-left: 0.5rem;
+    font-size: 0.9em;
+}
+
+.empty {
+    color: #969896;
+    font-style: italic;
+}
+
+/* Post Page */
+.post {
+    padding: 1rem 0;
+}
+
+.post-header {
+    margin-bottom: 1rem;
+}
+
+.post-meta {
+    color: #969896;
+    margin: 1rem 0;
+}
+
+.post-meta .date {
+    color: #81a2be;
+}
+
+.post-title {
+    color: #b5bd68;
+    margin: 1rem 0;
+}
+
+.post-content {
+    line-height: 1.8;
+    margin: 2rem 0;
+}
+
+.post-content h1, .post-content h2, .post-content h3 {
+    color: #81a2be;
+    margin-top: 2rem;
+}
+
+.post-content code {
+    background: #2d2d2d;
+    padding: 0.2rem 0.4rem;
+    border-radius: 3px;
+}
+
+.post-content pre {
+    background: #2d2d2d;
+    padding: 1rem;
+    border-radius: 5px;
+    overflow-x: auto;
+}
+
+.post-content a {
+    color: #b5bd68;
+}
+
+.post-content a:hover {
+    color: #f0c674;
+}
+
+.post-footer {
+    margin-top: 3rem;
+    border-top: 1px solid #333;
+    padding-top: 1rem;
+}
+
+.username {
+    color: #b5bd68;
+}
+
+.path {
+    color: #81a2be;
+}
