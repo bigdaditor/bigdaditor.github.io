@@ -1,9 +1,68 @@
----
-layout: default
-title: Home
----
-<div id="terminal-output"></div>
-<div class="prompt-line">
-  <span class="username">bigdaditor@blog</span>:<span class="path">~</span>$
-  <input type="text" id="terminal-input" autofocus />
-</div>
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>bigdaditor's blog</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <header>
+        <h1><a href="/">bigdaditor's blog</a></h1>
+        <nav>
+            <a href="https://github.com/bigdaditor">GitHub</a>
+        </nav>
+    </header>
+
+    <main id="post-container">
+        <!-- JS renders post list here -->
+    </main>
+
+    <footer>
+        <p>&copy; 2026 bigdaditor</p>
+    </footer>
+
+    <script>
+        fetch('posts.json')
+            .then(res => res.json())
+            .then(posts => {
+                const container = document.getElementById('post-container');
+
+                // Group by category
+                const categories = {};
+                posts.forEach(post => {
+                    if (!categories[post.category]) {
+                        categories[post.category] = [];
+                    }
+                    categories[post.category].push(post);
+                });
+
+                // Render each category
+                let isFirst = true;
+                for (const [category, items] of Object.entries(categories)) {
+                    const details = document.createElement('details');
+                    if (isFirst) {
+                        details.open = true;
+                        isFirst = false;
+                    }
+
+                    const summary = document.createElement('summary');
+                    summary.textContent = category;
+                    details.appendChild(summary);
+
+                    const ul = document.createElement('ul');
+                    ul.className = 'post-list';
+
+                    items.forEach(post => {
+                        const li = document.createElement('li');
+                        li.innerHTML = `<a href="posts/${post.file}">${post.title}</a><span class="post-date">${post.date}</span>`;
+                        ul.appendChild(li);
+                    });
+
+                    details.appendChild(ul);
+                    container.appendChild(details);
+                }
+            });
+    </script>
+</body>
+</html>
