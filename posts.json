@@ -1,14 +1,8 @@
 [
   {
-    "title": "Hello Jekyll",
-    "date": "2026-01-12",
-    "category": "Backend",
-    "file": "2026-01-12-hello-jekyll.html"
-  },
-  {
-    "title": "TEST",
-    "date": "2026-01-12",
-    "category": "Tech",
-    "file": "2026-01-12-test.html"
+    "title": "Rust 1시간 속성 가이드 - Java 5년차 개발자용",
+    "date": "2026-01-25",
+    "category": "Rust",
+    "file": "rust-for-java-devs.md"
   }
 ]
