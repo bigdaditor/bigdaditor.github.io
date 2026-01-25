@@ -55,7 +55,11 @@
 
                     items.forEach(post => {
                         const li = document.createElement('li');
-                        li.innerHTML = `<a href="posts/${post.file}">${post.title}</a><span class="post-date">${post.date}</span>`;
+                        // .md 파일은 뷰어로, .html은 직접 링크
+                        const href = post.file.endsWith('.md')
+                            ? `post.html?file=${encodeURIComponent(post.file)}`
+                            : `posts/${post.file}`;
+                        li.innerHTML = `<a href="${href}">${post.title}</a><span class="post-date">${post.date}</span>`;
                         ul.appendChild(li);
                     });
 
