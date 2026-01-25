@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Loading... - bigdaditor's blog</title>
+    <link rel="stylesheet" href="css/style.css">
+    <!-- GitHub Markdown CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/github-markdown-css/5.5.1/github-markdown-light.min.css">
+    <!-- Highlight.js Theme -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css">
+    <style>
+        .markdown-body {
+            box-sizing: border-box;
+            min-width: 200px;
+            max-width: 980px;
+            margin: 0 auto;
+            padding: 0;
+        }
+        .markdown-body pre {
+            background-color: #f6f8fa;
+        }
+        .markdown-body table {
+            display: table;
+            width: 100%;
+        }
+        .markdown-body blockquote {
+            border-left: 4px solid #d0d7de;
+            padding-left: 1em;
+            color: #656d76;
+        }
+        article {
+            line-height: 1.8;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1><a href="/">bigdaditor's blog</a></h1>
+        <nav>
+            <a href="https://github.com/bigdaditor">GitHub</a>
+        </nav>
+    </header>
+
+    <main>
+        <a href="/" class="back-link">← 목록으로</a>
+        <article id="content" class="markdown-body">
+            <p>Loading...</p>
+        </article>
+    </main>
+
+    <footer>
+        <p>&copy; 2026 bigdaditor</p>
+    </footer>
+
+    <!-- Marked.js -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/marked/12.0.0/marked.min.js"></script>
+    <!-- Highlight.js -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+    <!-- Languages -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/rust.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/java.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/bash.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/toml.min.js"></script>
+
+    <script>
+        // Configure marked with highlight.js
+        marked.setOptions({
+            highlight: function(code, lang) {
+                if (lang && hljs.getLanguage(lang)) {
+                    return hljs.highlight(code, { language: lang }).value;
+                }
+                return hljs.highlightAuto(code).value;
+            },
+            gfm: true,
+            breaks: false
+        });
+
+        // Get file parameter from URL
+        const params = new URLSearchParams(window.location.search);
+        const file = params.get('file');
+
+        if (file) {
+            fetch('posts/' + file)
+                .then(res => {
+                    if (!res.ok) throw new Error('File not found');
+                    return res.text();
+                })
+                .then(markdown => {
+                    // Extract title from first h1
+                    const titleMatch = markdown.match(/^#\s+(.+)$/m);
+                    if (titleMatch) {
+                        document.title = titleMatch[1] + " - bigdaditor's blog";
+                    }
+
+                    // Render markdown
+                    document.getElementById('content').innerHTML = marked.parse(markdown);
+
+                    // Apply highlight.js to code blocks
+                    document.querySelectorAll('pre code').forEach((block) => {
+                        hljs.highlightElement(block);
+                    });
+                })
+                .catch(err => {
+                    document.getElementById('content').innerHTML =
+                        '<p>포스트를 불러올 수 없습니다: ' + err.message + '</p>';
+                });
+        } else {
+            document.getElementById('content').innerHTML = '<p>파일이 지정되지 않았습니다.</p>';
+        }
+    </script>
+</body>
+</html>
