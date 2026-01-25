@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>rust-for-java-devs</title>
     <style>
+
         * { box-sizing: border-box; }
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
@@ -13,15 +14,19 @@
             margin: 0 auto;
             padding: 2rem 1rem;
             color: #333;
+            background: #fff;
         }
-        h1, h2, h3, h4, h5, h6 { margin-top: 1.5em; margin-bottom: 0.5em; }
+        h1, h2, h3, h4, h5, h6 { margin-top: 1.5em; margin-bottom: 0.5em; font-weight: 600; }
         h1 { font-size: 2em; border-bottom: 1px solid #eee; padding-bottom: 0.3em; }
         h2 { font-size: 1.5em; }
-        a { color: #0066cc; }
+        h3 { font-size: 1.25em; }
+        a { color: #0066cc; text-decoration: none; }
+        a:hover { text-decoration: underline; }
         code {
             background: #f4f4f4;
             padding: 0.2em 0.4em;
             border-radius: 3px;
+            font-family: 'SFMono-Regular', Consolas, monospace;
             font-size: 0.9em;
         }
         pre {
@@ -39,96 +44,128 @@
         }
         img { max-width: 100%; height: auto; }
         table { border-collapse: collapse; width: 100%; margin: 1em 0; }
-        th, td { border: 1px solid #ddd; padding: 0.5em; text-align: left; }
-        th { background: #f4f4f4; }
+        th, td { border: 1px solid #ddd; padding: 0.5em 1em; text-align: left; }
+        th { background: #f4f4f4; font-weight: 600; }
         hr { border: none; border-top: 1px solid #eee; margin: 2em 0; }
+        ul, ol { padding-left: 2em; }
+        li { margin: 0.25em 0; }
+        .task-list-item { list-style: none; margin-left: -1.5em; }
+        .task-list-item input[type="checkbox"] { margin-right: 0.5em; }
+        .callout { padding: 1em; border-radius: 5px; margin: 1em 0; border-left: 4px solid #666; background: #f9f9f9; }
+        .callout-title { font-weight: 600; margin-bottom: 0.5em; }
+        mark { background: #fff3a3; padding: 0.1em 0.2em; }
+        .tag { background: #e0e0e0; padding: 0.1em 0.4em; border-radius: 3px; font-size: 0.85em; }
+        .internal-link { color: #705dcf; }
+        .external-link::after { content: ' ↗'; font-size: 0.8em; }
+    
     </style>
 </head>
-<body>
-<h1>Rust 1시간 속성 가이드 - Java 5년차 개발자용</h1>
-
-<blockquote><strong>목표</strong>: 웹 프레임워크 기여 가능 + 멀티스레드 코딩 가능 수준까지</blockquote>
-
+<body class="markdown-preview-view">
+<h1 data-heading="Rust 1시간 속성 가이드 - Java 5년차 개발자용" dir="auto">Rust 1시간 속성 가이드 - Java 5년차 개발자용</h1>
+<blockquote dir="auto">
+<p><strong>목표</strong>: 웹 프레임워크 기여 가능 + 멀티스레드 코딩 가능 수준까지</p>
+</blockquote>
 <hr>
-
-<h2>1. 소유권 (Ownership) - Rust의 핵심</h2>
-
-<p>Java는 GC가 메모리 관리. Rust는 <strong>컴파일 타임에 메모리 관리 강제</strong>.</p>
-
-<pre><code>fn main() {
-    let s1 = String::from("햄");
-    let s2 = s1;  // s1의 소유권이 s2로 "이동" (move)
-    // println!("{}", s1);  // ❌ 컴파일 에러! s1은 이제 무효
-    println!("{}", s2);     // ✅ OK
-}</code></pre>
-
-<p><strong>Java 마인드 번역</strong>: <code>s1 = null</code>이 자동으로 된다고 생각. 단, 컴파일러가 강제함.</p>
-
+<h2 data-heading="1. 소유권 (Ownership) - Rust의 핵심" dir="auto">1. 소유권 (Ownership) - Rust의 핵심</h2>
+<p dir="auto">Java는 GC가 메모리 관리. Rust는 <strong>컴파일 타임에 메모리 관리 강제</strong>.</p>
+<pre class="language-rust"><code class="language-rust is-loaded"><span class="token keyword">fn</span> <span class="token function-definition function">main</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">let</span> s1 <span class="token operator">=</span> <span class="token class-name">String</span><span class="token punctuation">::</span><span class="token function">from</span><span class="token punctuation">(</span><span class="token string">"햄"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">let</span> s2 <span class="token operator">=</span> s1<span class="token punctuation">;</span>  <span class="token comment">// s1의 소유권이 s2로 "이동" (move)</span>
+    <span class="token comment">// println!("{}", s1);  // ❌ 컴파일 에러! s1은 이제 무효</span>
+    <span class="token macro property">println!</span><span class="token punctuation">(</span><span class="token string">"{}"</span><span class="token punctuation">,</span> s2<span class="token punctuation">)</span><span class="token punctuation">;</span>     <span class="token comment">// ✅ OK</span>
+<span class="token punctuation">}</span>
+</code><button class="copy-code-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon lucide-copy"><rect x="8" y="8" width="14" height="14" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg></button></pre>
+<p dir="auto"><strong>Java 마인드 번역</strong>: <code class="code-styler-inline">s1 = null</code>이 자동으로 된다고 생각. 단, 컴파일러가 강제함.</p>
 <hr>
-
-<h2>2. 빌림 (Borrowing) - 참조의 규칙</h2>
-
-<pre><code>fn main() {
-    let s = String::from("햄");
+<h2 data-heading="2. 빌림 (Borrowing) - 참조의 규칙" dir="auto">2. 빌림 (Borrowing) - 참조의 규칙</h2>
+<pre class="language-rust"><code class="language-rust is-loaded"><span class="token keyword">fn</span> <span class="token function-definition function">main</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">let</span> s <span class="token operator">=</span> <span class="token class-name">String</span><span class="token punctuation">::</span><span class="token function">from</span><span class="token punctuation">(</span><span class="token string">"햄"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
     
-    // 불변 빌림 - 여러 개 가능
-    let r1 = &amp;s;
-    let r2 = &amp;s;  // ✅ OK
+    <span class="token comment">// 불변 빌림 - 여러 개 가능</span>
+    <span class="token keyword">let</span> r1 <span class="token operator">=</span> <span class="token operator">&amp;</span>s<span class="token punctuation">;</span>
+    <span class="token keyword">let</span> r2 <span class="token operator">=</span> <span class="token operator">&amp;</span>s<span class="token punctuation">;</span>  <span class="token comment">// ✅ OK</span>
     
-    // 가변 빌림 - 딱 하나만
-    let mut s2 = String::from("햄");
-    let r3 = &amp;mut s2;
-    // let r4 = &amp;mut s2;  // ❌ 컴파일 에러!
-}</code></pre>
-
-<h3>핵심 규칙</h3>
+    <span class="token comment">// 가변 빌림 - 딱 하나만</span>
+    <span class="token keyword">let</span> <span class="token keyword">mut</span> s2 <span class="token operator">=</span> <span class="token class-name">String</span><span class="token punctuation">::</span><span class="token function">from</span><span class="token punctuation">(</span><span class="token string">"햄"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">let</span> r3 <span class="token operator">=</span> <span class="token operator">&amp;</span><span class="token keyword">mut</span> s2<span class="token punctuation">;</span>
+    <span class="token comment">// let r4 = &amp;mut s2;  // ❌ 컴파일 에러!</span>
+<span class="token punctuation">}</span>
+</code><button class="copy-code-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon lucide-copy"><rect x="8" y="8" width="14" height="14" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg></button></pre>
+<h3 data-heading="핵심 규칙" dir="auto">핵심 규칙</h3>
 <table>
-<thead><tr><th style="text-align:left">규칙</th><th style="text-align:left">설명</th></tr></thead>
+<thead>
+<tr>
+<th>규칙</th>
+<th>설명</th>
+</tr>
+</thead>
 <tbody>
-<tr><td style="text-align:left">불변 참조 <code>&amp;T</code></td><td style="text-align:left">여러 개 OK</td></tr>
-<tr><td style="text-align:left">가변 참조 <code>&amp;mut T</code></td><td style="text-align:left">딱 하나만</td></tr>
-<tr><td style="text-align:left">동시 존재</td><td style="text-align:left">불변 + 가변 동시에 불가</td></tr>
+<tr>
+<td>불변 참조 <code class="code-styler-inline">&amp;T</code></td>
+<td>여러 개 OK</td>
+</tr>
+<tr>
+<td>가변 참조 <code class="code-styler-inline">&amp;mut T</code></td>
+<td>딱 하나만</td>
+</tr>
+<tr>
+<td>동시 존재</td>
+<td>불변 + 가변 동시에 불가</td>
+</tr>
 </tbody>
 </table>
-→ <strong>data race를 컴파일 타임에 방지</strong>
-
+<p dir="auto">→ <strong>data race를 컴파일 타임에 방지</strong></p>
 <hr>
+<h2 data-heading="3. `::` 연산자와 `From` 트레이트" dir="auto">3. <code class="code-styler-inline">::</code> 연산자와 <code class="code-styler-inline">From</code> 트레이트</h2>
+<h3 data-heading="`::` = 연관 함수 호출 (Java의 static 메서드)" dir="auto"><code class="code-styler-inline">::</code> = 연관 함수 호출 (Java의 static 메서드)</h3>
+<pre class="language-rust"><code class="language-rust is-loaded"><span class="token comment">// String::from은 이렇게 구현되어 있음</span>
+<span class="token keyword">impl</span> <span class="token class-name">String</span> <span class="token punctuation">{</span>
+    <span class="token keyword">pub</span> <span class="token keyword">fn</span> <span class="token function-definition function">from</span><span class="token punctuation">(</span>s<span class="token punctuation">:</span> <span class="token operator">&amp;</span><span class="token keyword">str</span><span class="token punctuation">)</span> <span class="token punctuation">-&gt;</span> <span class="token class-name">String</span> <span class="token punctuation">{</span>
+        <span class="token comment">// &amp;str을 String으로 변환</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
 
-<h2>3. <code>::</code> 연산자와 <code>From</code> 트레이트</h2>
+<span class="token comment">// 호출</span>
+<span class="token keyword">let</span> s <span class="token operator">=</span> <span class="token class-name">String</span><span class="token punctuation">::</span><span class="token function">from</span><span class="token punctuation">(</span><span class="token string">"햄"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>  <span class="token comment">// Java: String.from("햄")</span>
 
-<h3><code>::</code> = 연관 함수 호출 (Java의 static 메서드)</h3>
-
-<pre><code>// String::from은 이렇게 구현되어 있음
-impl String {
-    pub fn from(s: &amp;str) -&gt; String {
-        // &amp;str을 String으로 변환
-    }
-}
-
-<p>// 호출<br>let s = String::from("햄");  // Java: String.from("햄")</p>
-
-<p>// new도 마찬가지<br>impl User {<br>    pub fn new(name: String) -&gt; Self {<br>        User { name }<br>    }<br>}<br>let user = User::new(String::from("햄"));</code></pre></p>
-
-<h3><code>From</code> 트레이트 - 타입 변환 표준</h3>
-
-<pre><code>// From을 구현하면 Into도 자동 구현
-let s1 = String::from("햄");   // from 사용
-let s2: String = "햄".into();  // into 사용 (타입 명시 필요)</code></pre>
-
-<h3><code>&amp;str</code> vs <code>String</code></h3>
+<span class="token comment">// new도 마찬가지</span>
+<span class="token keyword">impl</span> <span class="token class-name">User</span> <span class="token punctuation">{</span>
+    <span class="token keyword">pub</span> <span class="token keyword">fn</span> <span class="token function-definition function">new</span><span class="token punctuation">(</span>name<span class="token punctuation">:</span> <span class="token class-name">String</span><span class="token punctuation">)</span> <span class="token punctuation">-&gt;</span> <span class="token keyword">Self</span> <span class="token punctuation">{</span>
+        <span class="token class-name">User</span> <span class="token punctuation">{</span> name <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+<span class="token keyword">let</span> user <span class="token operator">=</span> <span class="token class-name">User</span><span class="token punctuation">::</span><span class="token function">new</span><span class="token punctuation">(</span><span class="token class-name">String</span><span class="token punctuation">::</span><span class="token function">from</span><span class="token punctuation">(</span><span class="token string">"햄"</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+</code><button class="copy-code-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon lucide-copy"><rect x="8" y="8" width="14" height="14" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg></button></pre>
+<h3 data-heading="`From` 트레이트 - 타입 변환 표준" dir="auto"><code class="code-styler-inline">From</code> 트레이트 - 타입 변환 표준</h3>
+<pre class="language-rust"><code class="language-rust is-loaded"><span class="token comment">// From을 구현하면 Into도 자동 구현</span>
+<span class="token keyword">let</span> s1 <span class="token operator">=</span> <span class="token class-name">String</span><span class="token punctuation">::</span><span class="token function">from</span><span class="token punctuation">(</span><span class="token string">"햄"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>   <span class="token comment">// from 사용</span>
+<span class="token keyword">let</span> s2<span class="token punctuation">:</span> <span class="token class-name">String</span> <span class="token operator">=</span> <span class="token string">"햄"</span><span class="token punctuation">.</span><span class="token function">into</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>  <span class="token comment">// into 사용 (타입 명시 필요)</span>
+</code><button class="copy-code-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon lucide-copy"><rect x="8" y="8" width="14" height="14" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg></button></pre>
+<h3 data-heading="`&amp;str` vs `String`" dir="auto"><code class="code-styler-inline">&amp;str</code> vs <code class="code-styler-inline">String</code></h3>
 <table>
-<thead><tr><th style="text-align:left">타입</th><th style="text-align:left">설명</th><th style="text-align:left">Java 대응</th></tr></thead>
+<thead>
+<tr>
+<th>타입</th>
+<th>설명</th>
+<th>Java 대응</th>
+</tr>
+</thead>
 <tbody>
-<tr><td style="text-align:left"><code>&amp;str</code></td><td style="text-align:left">문자열 슬라이스 (불변, 어디든 위치 가능)</td><td style="text-align:left">-</td></tr>
-<tr><td style="text-align:left"><code>String</code></td><td style="text-align:left">힙 할당 가변 문자열</td><td style="text-align:left"><code>String</code></td></tr>
+<tr>
+<td><code class="code-styler-inline">&amp;str</code></td>
+<td>문자열 슬라이스 (불변, 어디든 위치 가능)</td>
+<td>-</td>
+</tr>
+<tr>
+<td><code class="code-styler-inline">String</code></td>
+<td>힙 할당 가변 문자열</td>
+<td><code class="code-styler-inline">String</code></td>
+</tr>
 </tbody>
 </table>
 <hr>
-
-<h2>4. 모듈 시스템 &amp; Import/Export</h2>
-
-<h3>파일 구조</h3>
-
+<h2 data-heading="4. 모듈 시스템 &amp; Import/Export" dir="auto">4. 모듈 시스템 &amp; Import/Export</h2>
+<h3 data-heading="파일 구조" dir="auto">파일 구조</h3>
 <pre><code>my_project/
 ├── Cargo.toml
 └── src/
@@ -137,277 +174,463 @@ let s2: String = "햄".into();  // into 사용 (타입 명시 필요)</code></pr
     ├── user.rs          # user 모듈
     └── services/        # 서브 모듈 디렉토리
         ├── mod.rs       # services 모듈 정의
-        └── auth.rs      # services::auth 모듈</code></pre>
+        └── auth.rs      # services::auth 모듈
+</code><button class="copy-code-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon lucide-copy"><rect x="8" y="8" width="14" height="14" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg></button></pre>
+<h3 data-heading="모듈 선언 &amp; 내보내기" dir="auto">모듈 선언 &amp; 내보내기</h3>
+<pre class="language-rust"><code class="language-rust is-loaded"><span class="token comment">// src/user.rs</span>
+<span class="token keyword">pub</span> <span class="token keyword">struct</span> <span class="token type-definition class-name">User</span> <span class="token punctuation">{</span>          <span class="token comment">// pub = public</span>
+    <span class="token keyword">pub</span> name<span class="token punctuation">:</span> <span class="token class-name">String</span><span class="token punctuation">,</span>      <span class="token comment">// 필드도 pub 붙여야 외부 접근 가능</span>
+    age<span class="token punctuation">:</span> <span class="token keyword">u32</span><span class="token punctuation">,</span>              <span class="token comment">// private (pub 없음)</span>
+<span class="token punctuation">}</span>
 
-<h3>모듈 선언 &amp; 내보내기</h3>
+<span class="token keyword">impl</span> <span class="token class-name">User</span> <span class="token punctuation">{</span>
+    <span class="token keyword">pub</span> <span class="token keyword">fn</span> <span class="token function-definition function">new</span><span class="token punctuation">(</span>name<span class="token punctuation">:</span> <span class="token class-name">String</span><span class="token punctuation">,</span> age<span class="token punctuation">:</span> <span class="token keyword">u32</span><span class="token punctuation">)</span> <span class="token punctuation">-&gt;</span> <span class="token keyword">Self</span> <span class="token punctuation">{</span>
+        <span class="token class-name">User</span> <span class="token punctuation">{</span> name<span class="token punctuation">,</span> age <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span>
+    
+    <span class="token keyword">pub</span> <span class="token keyword">fn</span> <span class="token function-definition function">greet</span><span class="token punctuation">(</span><span class="token operator">&amp;</span><span class="token keyword">self</span><span class="token punctuation">)</span> <span class="token punctuation">-&gt;</span> <span class="token class-name">String</span> <span class="token punctuation">{</span>
+        <span class="token macro property">format!</span><span class="token punctuation">(</span><span class="token string">"안녕 난 {}"</span><span class="token punctuation">,</span> <span class="token keyword">self</span><span class="token punctuation">.</span>name<span class="token punctuation">)</span>
+    <span class="token punctuation">}</span>
+    
+    <span class="token keyword">fn</span> <span class="token function-definition function">secret</span><span class="token punctuation">(</span><span class="token operator">&amp;</span><span class="token keyword">self</span><span class="token punctuation">)</span> <span class="token punctuation">{</span><span class="token punctuation">}</span>  <span class="token comment">// private 메서드</span>
+<span class="token punctuation">}</span>
 
-<pre><code>// src/user.rs
-pub struct User {          // pub = public
-    pub name: String,      // 필드도 pub 붙여야 외부 접근 가능
-    age: u32,              // private (pub 없음)
-}
+<span class="token keyword">pub</span> <span class="token keyword">fn</span> <span class="token function-definition function">some_function</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span><span class="token punctuation">}</span>  <span class="token comment">// public 함수</span>
+</code><button class="copy-code-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon lucide-copy"><rect x="8" y="8" width="14" height="14" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg></button></pre>
+<h3 data-heading="모듈 등록 (⚠️ Java와 다른 점!)" dir="auto">모듈 등록 (⚠️ Java와 다른 점!)</h3>
+<pre class="language-rust"><code class="language-rust is-loaded"><span class="token comment">// src/main.rs 또는 src/lib.rs</span>
+<span class="token keyword">mod</span> <span class="token module-declaration namespace">user</span><span class="token punctuation">;</span>      <span class="token comment">// user.rs 모듈로 등록 (명시 필수!)</span>
+<span class="token keyword">mod</span> <span class="token module-declaration namespace">services</span><span class="token punctuation">;</span>  <span class="token comment">// services/mod.rs 모듈로 등록</span>
 
-<p>impl User {<br>    pub fn new(name: String, age: u32) -&gt; Self {<br>        User { name, age }<br>    }<br>    <br>    pub fn greet(&amp;self) -&gt; String {<br>        format!("안녕 난 {}", self.name)<br>    }<br>    <br>    fn secret(&amp;self) {}  // private 메서드<br>}</p>
+<span class="token keyword">fn</span> <span class="token function-definition function">main</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">let</span> u <span class="token operator">=</span> <span class="token namespace">user<span class="token punctuation">::</span></span><span class="token class-name">User</span><span class="token punctuation">::</span><span class="token function">new</span><span class="token punctuation">(</span><span class="token class-name">String</span><span class="token punctuation">::</span><span class="token function">from</span><span class="token punctuation">(</span><span class="token string">"햄"</span><span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token number">20</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+</code><button class="copy-code-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon lucide-copy"><rect x="8" y="8" width="14" height="14" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg></button></pre>
+<h3 data-heading="서브 모듈" dir="auto">서브 모듈</h3>
+<pre class="language-rust"><code class="language-rust is-loaded"><span class="token comment">// src/services/mod.rs</span>
+<span class="token keyword">pub</span> <span class="token keyword">mod</span> <span class="token module-declaration namespace">auth</span><span class="token punctuation">;</span>  <span class="token comment">// auth.rs를 서브모듈로 등록 + 외부 공개</span>
 
-<p>pub fn some_function() {}  // public 함수</code></pre></p>
+<span class="token comment">// src/services/auth.rs</span>
+<span class="token keyword">pub</span> <span class="token keyword">fn</span> <span class="token function-definition function">login</span><span class="token punctuation">(</span>id<span class="token punctuation">:</span> <span class="token operator">&amp;</span><span class="token keyword">str</span><span class="token punctuation">)</span> <span class="token punctuation">-&gt;</span> <span class="token keyword">bool</span> <span class="token punctuation">{</span>
+    <span class="token boolean">true</span>
+<span class="token punctuation">}</span>
+</code><button class="copy-code-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon lucide-copy"><rect x="8" y="8" width="14" height="14" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg></button></pre>
+<h3 data-heading="use - Import" dir="auto">use - Import</h3>
+<pre class="language-rust"><code class="language-rust is-loaded"><span class="token comment">// 기본</span>
+<span class="token keyword">use</span> <span class="token keyword">crate</span><span class="token module-declaration namespace"><span class="token punctuation">::</span>user<span class="token punctuation">::</span></span><span class="token class-name">User</span><span class="token punctuation">;</span>       <span class="token comment">// crate = 현재 프로젝트 루트</span>
+<span class="token keyword">use</span> <span class="token keyword">crate</span><span class="token module-declaration namespace"><span class="token punctuation">::</span>services<span class="token punctuation">::</span></span>auth<span class="token punctuation">;</span>
 
-<h3>모듈 등록 (⚠️ Java와 다른 점!)</h3>
+<span class="token comment">// 여러 개</span>
+<span class="token keyword">use</span> <span class="token namespace">std<span class="token punctuation">::</span>collections<span class="token punctuation">::</span></span><span class="token punctuation">{</span><span class="token class-name">HashMap</span><span class="token punctuation">,</span> <span class="token class-name">HashSet</span><span class="token punctuation">,</span> <span class="token class-name">VecDeque</span><span class="token punctuation">}</span><span class="token punctuation">;</span>
 
-<pre><code>// src/main.rs 또는 src/lib.rs
-mod user;      // user.rs 모듈로 등록 (명시 필수!)
-mod services;  // services/mod.rs 모듈로 등록
+<span class="token comment">// 전부 (비추)</span>
+<span class="token keyword">use</span> <span class="token namespace">std<span class="token punctuation">::</span>collections<span class="token punctuation">::</span></span><span class="token operator">*</span><span class="token punctuation">;</span>
 
-<p>fn main() {<br>    let u = user::User::new(String::from("햄"), 20);<br>}</code></pre></p>
+<span class="token comment">// 별칭</span>
+<span class="token keyword">use</span> <span class="token namespace">std<span class="token punctuation">::</span>collections<span class="token punctuation">::</span></span><span class="token class-name">HashMap</span> <span class="token keyword">as</span> <span class="token class-name">Map</span><span class="token punctuation">;</span>
 
-<h3>서브 모듈</h3>
-
-<pre><code>// src/services/mod.rs
-pub mod auth;  // auth.rs를 서브모듈로 등록 + 외부 공개
-
-<p>// src/services/auth.rs<br>pub fn login(id: &amp;str) -&gt; bool {<br>    true<br>}</code></pre></p>
-
-<h3>use - Import</h3>
-
-<pre><code>// 기본
-use crate::user::User;       // crate = 현재 프로젝트 루트
-use crate::services::auth;
-
-<p>// 여러 개<br>use std::collections::{HashMap, HashSet, VecDeque};</p>
-
-<p>// 전부 (비추)<br>use std::collections::*;</p>
-
-<p>// 별칭<br>use std::collections::HashMap as Map;</p>
-
-<p>// 중첩<br>use std::{<br>    io::{self, Read, Write},  // self = std::io 자체도<br>    fs::File,<br>};</code></pre></p>
-
-<h3>pub use - 재내보내기</h3>
-
-<pre><code>// src/lib.rs
-mod user;
-pub use user::User;  // 외부에서 my_crate::User로 접근 가능</code></pre>
-
-<h3>가시성 정리</h3>
-
+<span class="token comment">// 중첩</span>
+<span class="token keyword">use</span> <span class="token namespace">std<span class="token punctuation">::</span></span><span class="token punctuation">{</span>
+    <span class="token namespace">io<span class="token punctuation">::</span></span><span class="token punctuation">{</span><span class="token keyword">self</span><span class="token punctuation">,</span> <span class="token class-name">Read</span><span class="token punctuation">,</span> <span class="token class-name">Write</span><span class="token punctuation">}</span><span class="token punctuation">,</span>  <span class="token comment">// self = std::io 자체도</span>
+    <span class="token namespace">fs<span class="token punctuation">::</span></span><span class="token class-name">File</span><span class="token punctuation">,</span>
+<span class="token punctuation">}</span><span class="token punctuation">;</span>
+</code><button class="copy-code-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon lucide-copy"><rect x="8" y="8" width="14" height="14" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg></button></pre>
+<h3 data-heading="pub use - 재내보내기" dir="auto">pub use - 재내보내기</h3>
+<pre class="language-rust"><code class="language-rust is-loaded"><span class="token comment">// src/lib.rs</span>
+<span class="token keyword">mod</span> <span class="token module-declaration namespace">user</span><span class="token punctuation">;</span>
+<span class="token keyword">pub</span> <span class="token keyword">use</span> <span class="token namespace">user<span class="token punctuation">::</span></span><span class="token class-name">User</span><span class="token punctuation">;</span>  <span class="token comment">// 외부에서 my_crate::User로 접근 가능</span>
+</code><button class="copy-code-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon lucide-copy"><rect x="8" y="8" width="14" height="14" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg></button></pre>
+<h3 data-heading="가시성 정리" dir="auto">가시성 정리</h3>
 <table>
-<thead><tr><th style="text-align:left">Rust</th><th style="text-align:left">Java 대응</th><th style="text-align:left">범위</th></tr></thead>
+<thead>
+<tr>
+<th>Rust</th>
+<th>Java 대응</th>
+<th>범위</th>
+</tr>
+</thead>
 <tbody>
-<tr><td style="text-align:left"><code>pub</code></td><td style="text-align:left"><code>public</code></td><td style="text-align:left">어디서든</td></tr>
-<tr><td style="text-align:left">(없음)</td><td style="text-align:left"><code>private</code></td><td style="text-align:left">같은 모듈</td></tr>
-<tr><td style="text-align:left"><code>pub(crate)</code></td><td style="text-align:left">package-private</td><td style="text-align:left">같은 크레이트</td></tr>
-<tr><td style="text-align:left"><code>pub(super)</code></td><td style="text-align:left">protected 비슷</td><td style="text-align:left">부모 모듈까지</td></tr>
+<tr>
+<td><code class="code-styler-inline">pub</code></td>
+<td><code class="code-styler-inline">public</code></td>
+<td>어디서든</td>
+</tr>
+<tr>
+<td>(없음)</td>
+<td><code class="code-styler-inline">private</code></td>
+<td>같은 모듈</td>
+</tr>
+<tr>
+<td><code class="code-styler-inline">pub(crate)</code></td>
+<td>package-private</td>
+<td>같은 크레이트</td>
+</tr>
+<tr>
+<td><code class="code-styler-inline">pub(super)</code></td>
+<td>protected 비슷</td>
+<td>부모 모듈까지</td>
+</tr>
 </tbody>
 </table>
-<h3>외부 크레이트</h3>
-
-<pre><code># Cargo.toml
-[dependencies]
-serde = "1.0"
-tokio = { version = "1", features = ["full"] }</code></pre>
-
-<pre><code>use serde::{Serialize, Deserialize};
-use tokio::fs::File;</code></pre>
-
+<h3 data-heading="외부 크레이트" dir="auto">외부 크레이트</h3>
+<pre class="language-toml"><code class="language-toml is-loaded"><span class="token comment"># Cargo.toml</span>
+<span class="token punctuation">[</span><span class="token table class-name">dependencies</span><span class="token punctuation">]</span>
+<span class="token key property">serde</span> <span class="token punctuation">=</span> <span class="token string">"1.0"</span>
+<span class="token key property">tokio</span> <span class="token punctuation">=</span> <span class="token punctuation">{</span> <span class="token key property">version</span> <span class="token punctuation">=</span> <span class="token string">"1"</span><span class="token punctuation">,</span> <span class="token key property">features</span> <span class="token punctuation">=</span> <span class="token punctuation">[</span><span class="token string">"full"</span><span class="token punctuation">]</span> <span class="token punctuation">}</span>
+</code><button class="copy-code-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon lucide-copy"><rect x="8" y="8" width="14" height="14" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg></button></pre>
+<pre class="language-rust"><code class="language-rust is-loaded"><span class="token keyword">use</span> <span class="token namespace">serde<span class="token punctuation">::</span></span><span class="token punctuation">{</span><span class="token class-name">Serialize</span><span class="token punctuation">,</span> <span class="token class-name">Deserialize</span><span class="token punctuation">}</span><span class="token punctuation">;</span>
+<span class="token keyword">use</span> <span class="token namespace">tokio<span class="token punctuation">::</span>fs<span class="token punctuation">::</span></span><span class="token class-name">File</span><span class="token punctuation">;</span>
+</code><button class="copy-code-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon lucide-copy"><rect x="8" y="8" width="14" height="14" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg></button></pre>
 <hr>
+<h2 data-heading="5. 타입 시스템 - trait" dir="auto">5. 타입 시스템 - trait</h2>
+<pre class="language-rust"><code class="language-rust is-loaded"><span class="token comment">// Java interface = Rust trait</span>
+<span class="token keyword">trait</span> <span class="token type-definition class-name">Greet</span> <span class="token punctuation">{</span>
+    <span class="token keyword">fn</span> <span class="token function-definition function">greet</span><span class="token punctuation">(</span><span class="token operator">&amp;</span><span class="token keyword">self</span><span class="token punctuation">)</span> <span class="token punctuation">-&gt;</span> <span class="token class-name">String</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
 
-<h2>5. 타입 시스템 - trait</h2>
+<span class="token keyword">struct</span> <span class="token type-definition class-name">Developer</span> <span class="token punctuation">{</span>
+    name<span class="token punctuation">:</span> <span class="token class-name">String</span><span class="token punctuation">,</span>
+<span class="token punctuation">}</span>
 
-<pre><code>// Java interface = Rust trait
-trait Greet {
-    fn greet(&amp;self) -&gt; String;
-}
+<span class="token keyword">impl</span> <span class="token class-name">Greet</span> <span class="token keyword">for</span> <span class="token class-name">Developer</span> <span class="token punctuation">{</span>
+    <span class="token keyword">fn</span> <span class="token function-definition function">greet</span><span class="token punctuation">(</span><span class="token operator">&amp;</span><span class="token keyword">self</span><span class="token punctuation">)</span> <span class="token punctuation">-&gt;</span> <span class="token class-name">String</span> <span class="token punctuation">{</span>
+        <span class="token macro property">format!</span><span class="token punctuation">(</span><span class="token string">"{}입니다"</span><span class="token punctuation">,</span> <span class="token keyword">self</span><span class="token punctuation">.</span>name<span class="token punctuation">)</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
 
-<p>struct Developer {<br>    name: String,<br>}</p>
+<span class="token comment">// 제네릭 + trait bound (Java의 &lt;T extends Interface&gt;)</span>
+<span class="token keyword">fn</span> <span class="token function-definition function">say_hello</span><span class="token operator">&lt;</span><span class="token class-name">T</span><span class="token punctuation">:</span> <span class="token class-name">Greet</span><span class="token operator">&gt;</span><span class="token punctuation">(</span>entity<span class="token punctuation">:</span> <span class="token operator">&amp;</span><span class="token class-name">T</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token macro property">println!</span><span class="token punctuation">(</span><span class="token string">"{}"</span><span class="token punctuation">,</span> entity<span class="token punctuation">.</span><span class="token function">greet</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
 
-<p>impl Greet for Developer {<br>    fn greet(&amp;self) -&gt; String {<br>        format!("{}입니다", self.name)<br>    }<br>}</p>
+<span class="token comment">// 여러 trait bound</span>
+<span class="token keyword">fn</span> <span class="token function-definition function">do_something</span><span class="token operator">&lt;</span><span class="token class-name">T</span><span class="token punctuation">:</span> <span class="token class-name">Clone</span> <span class="token operator">+</span> <span class="token class-name">Debug</span><span class="token operator">&gt;</span><span class="token punctuation">(</span>item<span class="token punctuation">:</span> <span class="token class-name">T</span><span class="token punctuation">)</span> <span class="token punctuation">{</span><span class="token punctuation">}</span>
 
-<p>// 제네릭 + trait bound (Java의 &lt;T extends Interface&gt;)<br>fn say_hello&lt;T: Greet&gt;(entity: &amp;T) {<br>    println!("{}", entity.greet());<br>}</p>
-
-<p>// 여러 trait bound<br>fn do_something&lt;T: Clone + Debug&gt;(item: T) {}</p>
-
-<p>// where 절 (복잡할 때)<br>fn complex&lt;T, U&gt;(t: T, u: U)<br>where<br>    T: Clone + Debug,<br>    U: Serialize,<br>{}</code></pre></p>
-
+<span class="token comment">// where 절 (복잡할 때)</span>
+<span class="token keyword">fn</span> <span class="token function-definition function">complex</span><span class="token operator">&lt;</span><span class="token class-name">T</span><span class="token punctuation">,</span> <span class="token class-name">U</span><span class="token operator">&gt;</span><span class="token punctuation">(</span>t<span class="token punctuation">:</span> <span class="token class-name">T</span><span class="token punctuation">,</span> u<span class="token punctuation">:</span> <span class="token class-name">U</span><span class="token punctuation">)</span>
+<span class="token keyword">where</span>
+    <span class="token class-name">T</span><span class="token punctuation">:</span> <span class="token class-name">Clone</span> <span class="token operator">+</span> <span class="token class-name">Debug</span><span class="token punctuation">,</span>
+    <span class="token class-name">U</span><span class="token punctuation">:</span> <span class="token class-name">Serialize</span><span class="token punctuation">,</span>
+<span class="token punctuation">{</span><span class="token punctuation">}</span>
+</code><button class="copy-code-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon lucide-copy"><rect x="8" y="8" width="14" height="14" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg></button></pre>
 <hr>
+<h2 data-heading="6. 에러 처리 - Exception 없음" dir="auto">6. 에러 처리 - Exception 없음</h2>
+<pre class="language-rust"><code class="language-rust is-loaded"><span class="token keyword">fn</span> <span class="token function-definition function">divide</span><span class="token punctuation">(</span>a<span class="token punctuation">:</span> <span class="token keyword">i32</span><span class="token punctuation">,</span> b<span class="token punctuation">:</span> <span class="token keyword">i32</span><span class="token punctuation">)</span> <span class="token punctuation">-&gt;</span> <span class="token class-name">Result</span><span class="token operator">&lt;</span><span class="token keyword">i32</span><span class="token punctuation">,</span> <span class="token class-name">String</span><span class="token operator">&gt;</span> <span class="token punctuation">{</span>
+    <span class="token keyword">if</span> b <span class="token operator">==</span> <span class="token number">0</span> <span class="token punctuation">{</span>
+        <span class="token class-name">Err</span><span class="token punctuation">(</span><span class="token string">"0으로 나누기 불가"</span><span class="token punctuation">.</span><span class="token function">to_string</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+    <span class="token punctuation">}</span> <span class="token keyword">else</span> <span class="token punctuation">{</span>
+        <span class="token class-name">Ok</span><span class="token punctuation">(</span>a <span class="token operator">/</span> b<span class="token punctuation">)</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
 
-<h2>6. 에러 처리 - Exception 없음</h2>
-
-<pre><code>fn divide(a: i32, b: i32) -&gt; Result&lt;i32, String&gt; {
-    if b == 0 {
-        Err("0으로 나누기 불가".to_string())
-    } else {
-        Ok(a / b)
-    }
-}
-
-<p>fn main() {<br>    // 방법 1: match<br>    match divide(10, 0) {<br>        Ok(result) =&gt; println!("결과: {}", result),<br>        Err(e) =&gt; println!("에러: {}", e),<br>    }<br>    <br>    // 방법 2: ? 연산자 (에러 전파, throws 같은 거)<br>    fn calc() -&gt; Result&lt;i32, String&gt; {<br>        let x = divide(10, 2)?;  // 에러면 바로 return Err<br>        Ok(x * 2)<br>    }<br>    <br>    // 방법 3: unwrap (panic 발생, 프로덕션 비추)<br>    let result = divide(10, 2).unwrap();<br>    <br>    // 방법 4: unwrap_or (기본값)<br>    let result = divide(10, 0).unwrap_or(0);<br>}</code></pre></p>
-
+<span class="token keyword">fn</span> <span class="token function-definition function">main</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token comment">// 방법 1: match</span>
+    <span class="token keyword">match</span> <span class="token function">divide</span><span class="token punctuation">(</span><span class="token number">10</span><span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token class-name">Ok</span><span class="token punctuation">(</span>result<span class="token punctuation">)</span> <span class="token operator">=&gt;</span> <span class="token macro property">println!</span><span class="token punctuation">(</span><span class="token string">"결과: {}"</span><span class="token punctuation">,</span> result<span class="token punctuation">)</span><span class="token punctuation">,</span>
+        <span class="token class-name">Err</span><span class="token punctuation">(</span>e<span class="token punctuation">)</span> <span class="token operator">=&gt;</span> <span class="token macro property">println!</span><span class="token punctuation">(</span><span class="token string">"에러: {}"</span><span class="token punctuation">,</span> e<span class="token punctuation">)</span><span class="token punctuation">,</span>
+    <span class="token punctuation">}</span>
+    
+    <span class="token comment">// 방법 2: ? 연산자 (에러 전파, throws 같은 거)</span>
+    <span class="token keyword">fn</span> <span class="token function-definition function">calc</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">-&gt;</span> <span class="token class-name">Result</span><span class="token operator">&lt;</span><span class="token keyword">i32</span><span class="token punctuation">,</span> <span class="token class-name">String</span><span class="token operator">&gt;</span> <span class="token punctuation">{</span>
+        <span class="token keyword">let</span> x <span class="token operator">=</span> <span class="token function">divide</span><span class="token punctuation">(</span><span class="token number">10</span><span class="token punctuation">,</span> <span class="token number">2</span><span class="token punctuation">)</span><span class="token operator">?</span><span class="token punctuation">;</span>  <span class="token comment">// 에러면 바로 return Err</span>
+        <span class="token class-name">Ok</span><span class="token punctuation">(</span>x <span class="token operator">*</span> <span class="token number">2</span><span class="token punctuation">)</span>
+    <span class="token punctuation">}</span>
+    
+    <span class="token comment">// 방법 3: unwrap (panic 발생, 프로덕션 비추)</span>
+    <span class="token keyword">let</span> result <span class="token operator">=</span> <span class="token function">divide</span><span class="token punctuation">(</span><span class="token number">10</span><span class="token punctuation">,</span> <span class="token number">2</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">unwrap</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    
+    <span class="token comment">// 방법 4: unwrap_or (기본값)</span>
+    <span class="token keyword">let</span> result <span class="token operator">=</span> <span class="token function">divide</span><span class="token punctuation">(</span><span class="token number">10</span><span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">unwrap_or</span><span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+</code><button class="copy-code-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon lucide-copy"><rect x="8" y="8" width="14" height="14" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg></button></pre>
 <hr>
+<h2 data-heading="7. Option - null 없음" dir="auto">7. Option - null 없음</h2>
+<pre class="language-rust"><code class="language-rust is-loaded"><span class="token keyword">fn</span> <span class="token function-definition function">find_user</span><span class="token punctuation">(</span>id<span class="token punctuation">:</span> <span class="token keyword">i32</span><span class="token punctuation">)</span> <span class="token punctuation">-&gt;</span> <span class="token class-name">Option</span><span class="token operator">&lt;</span><span class="token class-name">String</span><span class="token operator">&gt;</span> <span class="token punctuation">{</span>
+    <span class="token keyword">if</span> id <span class="token operator">==</span> <span class="token number">1</span> <span class="token punctuation">{</span>
+        <span class="token class-name">Some</span><span class="token punctuation">(</span><span class="token string">"햄"</span><span class="token punctuation">.</span><span class="token function">to_string</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+    <span class="token punctuation">}</span> <span class="token keyword">else</span> <span class="token punctuation">{</span>
+        <span class="token class-name">None</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
 
-<h2>7. Option - null 없음</h2>
-
-<pre><code>fn find_user(id: i32) -&gt; Option&lt;String&gt; {
-    if id == 1 {
-        Some("햄".to_string())
-    } else {
-        None
-    }
-}
-
-<p>fn main() {<br>    // if let 패턴<br>    if let Some(name) = find_user(1) {<br>        println!("찾음: {}", name);<br>    }<br>    <br>    // match<br>    match find_user(1) {<br>        Some(name) =&gt; println!("{}", name),<br>        None =&gt; println!("없음"),<br>    }<br>    <br>    // unwrap_or<br>    let name = find<em>user(999).unwrap</em>or("익명".to_string());<br>    <br>    // map (체이닝)<br>    let upper = find<em>user(1).map(|n| n.to</em>uppercase());<br>}</code></pre></p>
-
+<span class="token keyword">fn</span> <span class="token function-definition function">main</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token comment">// if let 패턴</span>
+    <span class="token keyword">if</span> <span class="token keyword">let</span> <span class="token class-name">Some</span><span class="token punctuation">(</span>name<span class="token punctuation">)</span> <span class="token operator">=</span> <span class="token function">find_user</span><span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token macro property">println!</span><span class="token punctuation">(</span><span class="token string">"찾음: {}"</span><span class="token punctuation">,</span> name<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+    
+    <span class="token comment">// match</span>
+    <span class="token keyword">match</span> <span class="token function">find_user</span><span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token class-name">Some</span><span class="token punctuation">(</span>name<span class="token punctuation">)</span> <span class="token operator">=&gt;</span> <span class="token macro property">println!</span><span class="token punctuation">(</span><span class="token string">"{}"</span><span class="token punctuation">,</span> name<span class="token punctuation">)</span><span class="token punctuation">,</span>
+        <span class="token class-name">None</span> <span class="token operator">=&gt;</span> <span class="token macro property">println!</span><span class="token punctuation">(</span><span class="token string">"없음"</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+    <span class="token punctuation">}</span>
+    
+    <span class="token comment">// unwrap_or</span>
+    <span class="token keyword">let</span> name <span class="token operator">=</span> <span class="token function">find_user</span><span class="token punctuation">(</span><span class="token number">999</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">unwrap_or</span><span class="token punctuation">(</span><span class="token string">"익명"</span><span class="token punctuation">.</span><span class="token function">to_string</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    
+    <span class="token comment">// map (체이닝)</span>
+    <span class="token keyword">let</span> upper <span class="token operator">=</span> <span class="token function">find_user</span><span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">map</span><span class="token punctuation">(</span><span class="token closure-params"><span class="token closure-punctuation punctuation">|</span>n<span class="token closure-punctuation punctuation">|</span></span> n<span class="token punctuation">.</span><span class="token function">to_uppercase</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+</code><button class="copy-code-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon lucide-copy"><rect x="8" y="8" width="14" height="14" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg></button></pre>
 <hr>
+<h2 data-heading="8. 구조체 &amp; impl" dir="auto">8. 구조체 &amp; impl</h2>
+<pre class="language-rust"><code class="language-rust is-loaded"><span class="token keyword">struct</span> <span class="token type-definition class-name">User</span> <span class="token punctuation">{</span>
+    name<span class="token punctuation">:</span> <span class="token class-name">String</span><span class="token punctuation">,</span>
+    age<span class="token punctuation">:</span> <span class="token keyword">u32</span><span class="token punctuation">,</span>
+<span class="token punctuation">}</span>
 
-<h2>8. 구조체 &amp; impl</h2>
-
-<pre><code>struct User {
-    name: String,
-    age: u32,
-}
-
-<p>impl User {<br>    // 생성자 (연관 함수)<br>    fn new(name: String, age: u32) -&gt; Self {<br>        User { name, age }<br>    }<br>    <br>    // 인스턴스 메서드 (&amp;self = this, 불변)<br>    fn introduce(&amp;self) -&gt; String {<br>        format!("{}살 {}", self.age, self.name)<br>    }<br>    <br>    // 가변 메서드 (&amp;mut self)<br>    fn birthday(&amp;mut self) {<br>        self.age += 1;<br>    }<br>    <br>    // 소유권 가져가는 메서드 (self)<br>    fn destroy(self) {<br>        println!("{} 삭제됨", self.name);<br>        // 이후 self 사용 불가<br>    }<br>}</code></pre></p>
-
+<span class="token keyword">impl</span> <span class="token class-name">User</span> <span class="token punctuation">{</span>
+    <span class="token comment">// 생성자 (연관 함수)</span>
+    <span class="token keyword">fn</span> <span class="token function-definition function">new</span><span class="token punctuation">(</span>name<span class="token punctuation">:</span> <span class="token class-name">String</span><span class="token punctuation">,</span> age<span class="token punctuation">:</span> <span class="token keyword">u32</span><span class="token punctuation">)</span> <span class="token punctuation">-&gt;</span> <span class="token keyword">Self</span> <span class="token punctuation">{</span>
+        <span class="token class-name">User</span> <span class="token punctuation">{</span> name<span class="token punctuation">,</span> age <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span>
+    
+    <span class="token comment">// 인스턴스 메서드 (&amp;self = this, 불변)</span>
+    <span class="token keyword">fn</span> <span class="token function-definition function">introduce</span><span class="token punctuation">(</span><span class="token operator">&amp;</span><span class="token keyword">self</span><span class="token punctuation">)</span> <span class="token punctuation">-&gt;</span> <span class="token class-name">String</span> <span class="token punctuation">{</span>
+        <span class="token macro property">format!</span><span class="token punctuation">(</span><span class="token string">"{}살 {}"</span><span class="token punctuation">,</span> <span class="token keyword">self</span><span class="token punctuation">.</span>age<span class="token punctuation">,</span> <span class="token keyword">self</span><span class="token punctuation">.</span>name<span class="token punctuation">)</span>
+    <span class="token punctuation">}</span>
+    
+    <span class="token comment">// 가변 메서드 (&amp;mut self)</span>
+    <span class="token keyword">fn</span> <span class="token function-definition function">birthday</span><span class="token punctuation">(</span><span class="token operator">&amp;</span><span class="token keyword">mut</span> <span class="token keyword">self</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">self</span><span class="token punctuation">.</span>age <span class="token operator">+=</span> <span class="token number">1</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+    
+    <span class="token comment">// 소유권 가져가는 메서드 (self)</span>
+    <span class="token keyword">fn</span> <span class="token function-definition function">destroy</span><span class="token punctuation">(</span><span class="token keyword">self</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token macro property">println!</span><span class="token punctuation">(</span><span class="token string">"{} 삭제됨"</span><span class="token punctuation">,</span> <span class="token keyword">self</span><span class="token punctuation">.</span>name<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token comment">// 이후 self 사용 불가</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+</code><button class="copy-code-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon lucide-copy"><rect x="8" y="8" width="14" height="14" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg></button></pre>
 <hr>
+<h2 data-heading="9. Enum - Java enum의 강화판" dir="auto">9. Enum - Java enum의 강화판</h2>
+<pre class="language-rust"><code class="language-rust is-loaded"><span class="token comment">// 각 variant가 다른 데이터 보유 가능</span>
+<span class="token keyword">enum</span> <span class="token type-definition class-name">Message</span> <span class="token punctuation">{</span>
+    <span class="token class-name">Quit</span><span class="token punctuation">,</span>                        <span class="token comment">// 데이터 없음</span>
+    <span class="token class-name">Move</span> <span class="token punctuation">{</span> x<span class="token punctuation">:</span> <span class="token keyword">i32</span><span class="token punctuation">,</span> y<span class="token punctuation">:</span> <span class="token keyword">i32</span> <span class="token punctuation">}</span><span class="token punctuation">,</span>     <span class="token comment">// 구조체 형태</span>
+    <span class="token class-name">Write</span><span class="token punctuation">(</span><span class="token class-name">String</span><span class="token punctuation">)</span><span class="token punctuation">,</span>               <span class="token comment">// 튜플 형태</span>
+    <span class="token class-name">ChangeColor</span><span class="token punctuation">(</span><span class="token keyword">i32</span><span class="token punctuation">,</span> <span class="token keyword">i32</span><span class="token punctuation">,</span> <span class="token keyword">i32</span><span class="token punctuation">)</span><span class="token punctuation">,</span>  <span class="token comment">// 여러 값</span>
+<span class="token punctuation">}</span>
 
-<h2>9. Enum - Java enum의 강화판</h2>
+<span class="token keyword">fn</span> <span class="token function-definition function">process</span><span class="token punctuation">(</span>msg<span class="token punctuation">:</span> <span class="token class-name">Message</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">match</span> msg <span class="token punctuation">{</span>
+        <span class="token class-name">Message</span><span class="token punctuation">::</span><span class="token class-name">Quit</span> <span class="token operator">=&gt;</span> <span class="token macro property">println!</span><span class="token punctuation">(</span><span class="token string">"종료"</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+        <span class="token class-name">Message</span><span class="token punctuation">::</span><span class="token class-name">Move</span> <span class="token punctuation">{</span> x<span class="token punctuation">,</span> y <span class="token punctuation">}</span> <span class="token operator">=&gt;</span> <span class="token macro property">println!</span><span class="token punctuation">(</span><span class="token string">"이동: {}, {}"</span><span class="token punctuation">,</span> x<span class="token punctuation">,</span> y<span class="token punctuation">)</span><span class="token punctuation">,</span>
+        <span class="token class-name">Message</span><span class="token punctuation">::</span><span class="token class-name">Write</span><span class="token punctuation">(</span>text<span class="token punctuation">)</span> <span class="token operator">=&gt;</span> <span class="token macro property">println!</span><span class="token punctuation">(</span><span class="token string">"쓰기: {}"</span><span class="token punctuation">,</span> text<span class="token punctuation">)</span><span class="token punctuation">,</span>
+        <span class="token class-name">Message</span><span class="token punctuation">::</span><span class="token class-name">ChangeColor</span><span class="token punctuation">(</span>r<span class="token punctuation">,</span> g<span class="token punctuation">,</span> b<span class="token punctuation">)</span> <span class="token operator">=&gt;</span> <span class="token macro property">println!</span><span class="token punctuation">(</span><span class="token string">"색: {}/{}/{}"</span><span class="token punctuation">,</span> r<span class="token punctuation">,</span> g<span class="token punctuation">,</span> b<span class="token punctuation">)</span><span class="token punctuation">,</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
 
-<pre><code>// 각 variant가 다른 데이터 보유 가능
-enum Message {
-    Quit,                        // 데이터 없음
-    Move { x: i32, y: i32 },     // 구조체 형태
-    Write(String),               // 튜플 형태
-    ChangeColor(i32, i32, i32),  // 여러 값
-}
+<span class="token comment">// Result, Option도 사실 enum</span>
+<span class="token keyword">enum</span> <span class="token type-definition class-name">Option</span><span class="token operator">&lt;</span><span class="token class-name">T</span><span class="token operator">&gt;</span> <span class="token punctuation">{</span>
+    <span class="token class-name">Some</span><span class="token punctuation">(</span><span class="token class-name">T</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+    <span class="token class-name">None</span><span class="token punctuation">,</span>
+<span class="token punctuation">}</span>
 
-<p>fn process(msg: Message) {<br>    match msg {<br>        Message::Quit =&gt; println!("종료"),<br>        Message::Move { x, y } =&gt; println!("이동: {}, {}", x, y),<br>        Message::Write(text) =&gt; println!("쓰기: {}", text),<br>        Message::ChangeColor(r, g, b) =&gt; println!("색: {}/{}/{}", r, g, b),<br>    }<br>}</p>
-
-<p>// Result, Option도 사실 enum<br>enum Option&lt;T&gt; {<br>    Some(T),<br>    None,<br>}</p>
-
-<p>enum Result&lt;T, E&gt; {<br>    Ok(T),<br>    Err(E),<br>}</code></pre></p>
-
+<span class="token keyword">enum</span> <span class="token type-definition class-name">Result</span><span class="token operator">&lt;</span><span class="token class-name">T</span><span class="token punctuation">,</span> <span class="token class-name">E</span><span class="token operator">&gt;</span> <span class="token punctuation">{</span>
+    <span class="token class-name">Ok</span><span class="token punctuation">(</span><span class="token class-name">T</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+    <span class="token class-name">Err</span><span class="token punctuation">(</span><span class="token class-name">E</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+<span class="token punctuation">}</span>
+</code><button class="copy-code-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon lucide-copy"><rect x="8" y="8" width="14" height="14" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg></button></pre>
 <hr>
+<h2 data-heading="10. 멀티스레딩" dir="auto">10. 멀티스레딩</h2>
+<pre class="language-rust"><code class="language-rust is-loaded"><span class="token keyword">use</span> <span class="token namespace">std<span class="token punctuation">::</span></span>thread<span class="token punctuation">;</span>
+<span class="token keyword">use</span> <span class="token namespace">std<span class="token punctuation">::</span>sync<span class="token punctuation">::</span></span><span class="token punctuation">{</span><span class="token class-name">Arc</span><span class="token punctuation">,</span> <span class="token class-name">Mutex</span><span class="token punctuation">}</span><span class="token punctuation">;</span>
 
-<h2>10. 멀티스레딩</h2>
+<span class="token keyword">fn</span> <span class="token function-definition function">main</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token comment">// Arc = Atomic Reference Count (스레드 안전 참조 카운트)</span>
+    <span class="token comment">// Mutex = 뮤텍스 (Java synchronized 비슷)</span>
+    <span class="token keyword">let</span> counter <span class="token operator">=</span> <span class="token class-name">Arc</span><span class="token punctuation">::</span><span class="token function">new</span><span class="token punctuation">(</span><span class="token class-name">Mutex</span><span class="token punctuation">::</span><span class="token function">new</span><span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">let</span> <span class="token keyword">mut</span> handles <span class="token operator">=</span> <span class="token macro property">vec!</span><span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token punctuation">;</span>
 
-<pre><code>use std::thread;
-use std::sync::{Arc, Mutex};
+    <span class="token keyword">for</span> _ <span class="token keyword">in</span> <span class="token number">0</span><span class="token punctuation">..</span><span class="token number">10</span> <span class="token punctuation">{</span>
+        <span class="token keyword">let</span> counter <span class="token operator">=</span> <span class="token class-name">Arc</span><span class="token punctuation">::</span><span class="token function">clone</span><span class="token punctuation">(</span><span class="token operator">&amp;</span>counter<span class="token punctuation">)</span><span class="token punctuation">;</span>  <span class="token comment">// Arc 복제</span>
+        <span class="token keyword">let</span> handle <span class="token operator">=</span> <span class="token namespace">thread<span class="token punctuation">::</span></span><span class="token function">spawn</span><span class="token punctuation">(</span><span class="token keyword">move</span> <span class="token closure-params"><span class="token closure-punctuation punctuation">|</span><span class="token closure-punctuation punctuation">|</span></span> <span class="token punctuation">{</span>
+            <span class="token keyword">let</span> <span class="token keyword">mut</span> num <span class="token operator">=</span> counter<span class="token punctuation">.</span><span class="token function">lock</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">unwrap</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token operator">*</span>num <span class="token operator">+=</span> <span class="token number">1</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        handles<span class="token punctuation">.</span><span class="token function">push</span><span class="token punctuation">(</span>handle<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
 
-<p>fn main() {<br>    // Arc = Atomic Reference Count (스레드 안전 참조 카운트)<br>    // Mutex = 뮤텍스 (Java synchronized 비슷)<br>    let counter = Arc::new(Mutex::new(0));<br>    let mut handles = vec![];</p>
+    <span class="token keyword">for</span> handle <span class="token keyword">in</span> handles <span class="token punctuation">{</span>
+        handle<span class="token punctuation">.</span><span class="token function">join</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">unwrap</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>  <span class="token comment">// 스레드 종료 대기</span>
+    <span class="token punctuation">}</span>
 
-<p>for _ in 0..10 {<br>        let counter = Arc::clone(&amp;counter);  // Arc 복제<br>        let handle = thread::spawn(move || {<br>            let mut num = counter.lock().unwrap();<br>            *num += 1;<br>        });<br>        handles.push(handle);<br>    }</p>
-
-<p>for handle in handles {<br>        handle.join().unwrap();  // 스레드 종료 대기<br>    }</p>
-
-<p>println!("결과: {}", *counter.lock().unwrap());  // 10<br>}</code></pre></p>
-
-<h3>스레드 안전 타입</h3>
-
+    <span class="token macro property">println!</span><span class="token punctuation">(</span><span class="token string">"결과: {}"</span><span class="token punctuation">,</span> <span class="token operator">*</span>counter<span class="token punctuation">.</span><span class="token function">lock</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">unwrap</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>  <span class="token comment">// 10</span>
+<span class="token punctuation">}</span>
+</code><button class="copy-code-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon lucide-copy"><rect x="8" y="8" width="14" height="14" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg></button></pre>
+<h3 data-heading="스레드 안전 타입" dir="auto">스레드 안전 타입</h3>
 <table>
-<thead><tr><th style="text-align:left">타입</th><th style="text-align:left">용도</th></tr></thead>
+<thead>
+<tr>
+<th>타입</th>
+<th>용도</th>
+</tr>
+</thead>
 <tbody>
-<tr><td style="text-align:left"><code>Arc&lt;T&gt;</code></td><td style="text-align:left">여러 스레드에서 소유권 공유</td></tr>
-<tr><td style="text-align:left"><code>Mutex&lt;T&gt;</code></td><td style="text-align:left">상호 배제 (한 번에 하나만 접근)</td></tr>
-<tr><td style="text-align:left"><code>RwLock&lt;T&gt;</code></td><td style="text-align:left">읽기 여러 개, 쓰기 하나</td></tr>
-<tr><td style="text-align:left"><code>Atomic*</code></td><td style="text-align:left">원자적 연산 (AtomicBool, AtomicUsize 등)</td></tr>
+<tr>
+<td><code class="code-styler-inline">Arc&lt;T&gt;</code></td>
+<td>여러 스레드에서 소유권 공유</td>
+</tr>
+<tr>
+<td><code class="code-styler-inline">Mutex&lt;T&gt;</code></td>
+<td>상호 배제 (한 번에 하나만 접근)</td>
+</tr>
+<tr>
+<td><code class="code-styler-inline">RwLock&lt;T&gt;</code></td>
+<td>읽기 여러 개, 쓰기 하나</td>
+</tr>
+<tr>
+<td><code class="code-styler-inline">Atomic*</code></td>
+<td>원자적 연산 (AtomicBool, AtomicUsize 등)</td>
+</tr>
 </tbody>
 </table>
-<strong>Java와 차이점</strong>: 컴파일러가 <code>Send</code>, <code>Sync</code> trait으로 data race 가능성을 <strong>컴파일 에러로 잡음</strong>.
-
+<p dir="auto"><strong>Java와 차이점</strong>: 컴파일러가 <code class="code-styler-inline">Send</code>, <code class="code-styler-inline">Sync</code> trait으로 data race 가능성을 <strong>컴파일 에러로 잡음</strong>.</p>
 <hr>
+<h2 data-heading="11. 채널 - 스레드 간 통신" dir="auto">11. 채널 - 스레드 간 통신</h2>
+<pre class="language-rust"><code class="language-rust is-loaded"><span class="token keyword">use</span> <span class="token namespace">std<span class="token punctuation">::</span>sync<span class="token punctuation">::</span></span>mpsc<span class="token punctuation">;</span>  <span class="token comment">// multi-producer, single-consumer</span>
+<span class="token keyword">use</span> <span class="token namespace">std<span class="token punctuation">::</span></span>thread<span class="token punctuation">;</span>
 
-<h2>11. 채널 - 스레드 간 통신</h2>
+<span class="token keyword">fn</span> <span class="token function-definition function">main</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">let</span> <span class="token punctuation">(</span>tx<span class="token punctuation">,</span> rx<span class="token punctuation">)</span> <span class="token operator">=</span> <span class="token namespace">mpsc<span class="token punctuation">::</span></span><span class="token function">channel</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
 
-<pre><code>use std::sync::mpsc;  // multi-producer, single-consumer
-use std::thread;
+    <span class="token comment">// 송신측</span>
+    <span class="token namespace">thread<span class="token punctuation">::</span></span><span class="token function">spawn</span><span class="token punctuation">(</span><span class="token keyword">move</span> <span class="token closure-params"><span class="token closure-punctuation punctuation">|</span><span class="token closure-punctuation punctuation">|</span></span> <span class="token punctuation">{</span>
+        tx<span class="token punctuation">.</span><span class="token function">send</span><span class="token punctuation">(</span><span class="token string">"햄에서 보냄"</span><span class="token punctuation">.</span><span class="token function">to_string</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">unwrap</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
 
-<p>fn main() {<br>    let (tx, rx) = mpsc::channel();</p>
-
-<p>// 송신측<br>    thread::spawn(move || {<br>        tx.send("햄에서 보냄".to_string()).unwrap();<br>    });</p>
-
-<p>// 수신측<br>    let received = rx.recv().unwrap();<br>    println!("받음: {}", received);<br>    <br>    // 여러 producer<br>    let (tx, rx) = mpsc::channel();<br>    let tx2 = tx.clone();  // 송신자 복제 가능<br>    <br>    thread::spawn(move || tx.send(1).unwrap());<br>    thread::spawn(move || tx2.send(2).unwrap());<br>    <br>    for received in rx {<br>        println!("{}", received);<br>    }<br>}</code></pre></p>
-
+    <span class="token comment">// 수신측</span>
+    <span class="token keyword">let</span> received <span class="token operator">=</span> rx<span class="token punctuation">.</span><span class="token function">recv</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">unwrap</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token macro property">println!</span><span class="token punctuation">(</span><span class="token string">"받음: {}"</span><span class="token punctuation">,</span> received<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    
+    <span class="token comment">// 여러 producer</span>
+    <span class="token keyword">let</span> <span class="token punctuation">(</span>tx<span class="token punctuation">,</span> rx<span class="token punctuation">)</span> <span class="token operator">=</span> <span class="token namespace">mpsc<span class="token punctuation">::</span></span><span class="token function">channel</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">let</span> tx2 <span class="token operator">=</span> tx<span class="token punctuation">.</span><span class="token function">clone</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>  <span class="token comment">// 송신자 복제 가능</span>
+    
+    <span class="token namespace">thread<span class="token punctuation">::</span></span><span class="token function">spawn</span><span class="token punctuation">(</span><span class="token keyword">move</span> <span class="token closure-params"><span class="token closure-punctuation punctuation">|</span><span class="token closure-punctuation punctuation">|</span></span> tx<span class="token punctuation">.</span><span class="token function">send</span><span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">unwrap</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token namespace">thread<span class="token punctuation">::</span></span><span class="token function">spawn</span><span class="token punctuation">(</span><span class="token keyword">move</span> <span class="token closure-params"><span class="token closure-punctuation punctuation">|</span><span class="token closure-punctuation punctuation">|</span></span> tx2<span class="token punctuation">.</span><span class="token function">send</span><span class="token punctuation">(</span><span class="token number">2</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">unwrap</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    
+    <span class="token keyword">for</span> received <span class="token keyword">in</span> rx <span class="token punctuation">{</span>
+        <span class="token macro property">println!</span><span class="token punctuation">(</span><span class="token string">"{}"</span><span class="token punctuation">,</span> received<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+</code><button class="copy-code-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon lucide-copy"><rect x="8" y="8" width="14" height="14" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg></button></pre>
 <hr>
+<h2 data-heading="12. Async/Await - 웹 프레임워크 필수" dir="auto">12. Async/Await - 웹 프레임워크 필수</h2>
+<pre class="language-rust"><code class="language-rust is-loaded"><span class="token comment">// async 함수 정의</span>
+<span class="token keyword">async</span> <span class="token keyword">fn</span> <span class="token function-definition function">fetch_data</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">-&gt;</span> <span class="token class-name">Result</span><span class="token operator">&lt;</span><span class="token class-name">String</span><span class="token punctuation">,</span> <span class="token class-name">Error</span><span class="token operator">&gt;</span> <span class="token punctuation">{</span>
+    <span class="token keyword">let</span> response <span class="token operator">=</span> <span class="token namespace">reqwest<span class="token punctuation">::</span></span><span class="token function">get</span><span class="token punctuation">(</span><span class="token string">"https://api.example.com"</span><span class="token punctuation">)</span>
+        <span class="token punctuation">.</span><span class="token keyword">await</span><span class="token operator">?</span>   <span class="token comment">// 비동기 대기</span>
+        <span class="token punctuation">.</span><span class="token function">text</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+        <span class="token punctuation">.</span><span class="token keyword">await</span><span class="token operator">?</span><span class="token punctuation">;</span>
+    <span class="token class-name">Ok</span><span class="token punctuation">(</span>response<span class="token punctuation">)</span>
+<span class="token punctuation">}</span>
 
-<h2>12. Async/Await - 웹 프레임워크 필수</h2>
+<span class="token comment">// Axum 웹 프레임워크 예시</span>
+<span class="token keyword">use</span> <span class="token namespace">axum<span class="token punctuation">::</span></span><span class="token punctuation">{</span><span class="token namespace">routing<span class="token punctuation">::</span></span>get<span class="token punctuation">,</span> <span class="token class-name">Router</span><span class="token punctuation">}</span><span class="token punctuation">;</span>
 
-<pre><code>// async 함수 정의
-async fn fetch_data() -&gt; Result&lt;String, Error&gt; {
-    let response = reqwest::get("https://api.example.com")
-        .await?   // 비동기 대기
-        .text()
-        .await?;
-    Ok(response)
-}
+<span class="token keyword">async</span> <span class="token keyword">fn</span> <span class="token function-definition function">hello</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">-&gt;</span> <span class="token operator">&amp;</span><span class="token lifetime-annotation symbol">'static</span> <span class="token keyword">str</span> <span class="token punctuation">{</span>
+    <span class="token string">"Hello, 햄!"</span>
+<span class="token punctuation">}</span>
 
-<p>// Axum 웹 프레임워크 예시<br>use axum::{routing::get, Router};</p>
-
-<p>async fn hello() -&gt; &amp;'static str {<br>    "Hello, 햄!"<br>}</p>
-
-<p>#[tokio::main]  // async main을 위한 매크로<br>async fn main() {<br>    let app = Router::new()<br>        .route("/", get(hello));<br>    <br>    let listener = tokio::net::TcpListener::bind("0.0.0.0:3000")<br>        .await<br>        .unwrap();<br>    axum::serve(listener, app).await.unwrap();<br>}</code></pre></p>
-
-<h3>주요 async 런타임</h3>
-
+<span class="token attribute attr-name">#[tokio::main]</span>  <span class="token comment">// async main을 위한 매크로</span>
+<span class="token keyword">async</span> <span class="token keyword">fn</span> <span class="token function-definition function">main</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">let</span> app <span class="token operator">=</span> <span class="token class-name">Router</span><span class="token punctuation">::</span><span class="token function">new</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+        <span class="token punctuation">.</span><span class="token function">route</span><span class="token punctuation">(</span><span class="token string">"/"</span><span class="token punctuation">,</span> <span class="token function">get</span><span class="token punctuation">(</span>hello<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    
+    <span class="token keyword">let</span> listener <span class="token operator">=</span> <span class="token namespace">tokio<span class="token punctuation">::</span>net<span class="token punctuation">::</span></span><span class="token class-name">TcpListener</span><span class="token punctuation">::</span><span class="token function">bind</span><span class="token punctuation">(</span><span class="token string">"0.0.0.0:3000"</span><span class="token punctuation">)</span>
+        <span class="token punctuation">.</span><span class="token keyword">await</span>
+        <span class="token punctuation">.</span><span class="token function">unwrap</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token namespace">axum<span class="token punctuation">::</span></span><span class="token function">serve</span><span class="token punctuation">(</span>listener<span class="token punctuation">,</span> app<span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token keyword">await</span><span class="token punctuation">.</span><span class="token function">unwrap</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+</code><button class="copy-code-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon lucide-copy"><rect x="8" y="8" width="14" height="14" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg></button></pre>
+<h3 data-heading="주요 async 런타임" dir="auto">주요 async 런타임</h3>
 <table>
-<thead><tr><th style="text-align:left">런타임</th><th style="text-align:left">특징</th></tr></thead>
+<thead>
+<tr>
+<th>런타임</th>
+<th>특징</th>
+</tr>
+</thead>
 <tbody>
-<tr><td style="text-align:left"><code>tokio</code></td><td style="text-align:left">가장 인기, 대부분 웹 프레임워크 사용</td></tr>
-<tr><td style="text-align:left"><code>async-std</code></td><td style="text-align:left">std 라이브러리 스타일</td></tr>
+<tr>
+<td><code class="code-styler-inline">tokio</code></td>
+<td>가장 인기, 대부분 웹 프레임워크 사용</td>
+</tr>
+<tr>
+<td><code class="code-styler-inline">async-std</code></td>
+<td>std 라이브러리 스타일</td>
+</tr>
 </tbody>
 </table>
 <hr>
+<h2 data-heading="13. 라이프타임 - 처음엔 컴파일러 따라가기" dir="auto">13. 라이프타임 - 처음엔 컴파일러 따라가기</h2>
+<pre class="language-rust"><code class="language-rust is-loaded"><span class="token comment">// 컴파일러가 참조 유효 범위 추적</span>
+<span class="token comment">// 대부분 자동 추론, 가끔 명시 필요</span>
 
-<h2>13. 라이프타임 - 처음엔 컴파일러 따라가기</h2>
+<span class="token keyword">fn</span> <span class="token function-definition function">longest</span><span class="token operator">&lt;</span><span class="token lifetime-annotation symbol">'a</span><span class="token operator">&gt;</span><span class="token punctuation">(</span>x<span class="token punctuation">:</span> <span class="token operator">&amp;</span><span class="token lifetime-annotation symbol">'a</span> <span class="token keyword">str</span><span class="token punctuation">,</span> y<span class="token punctuation">:</span> <span class="token operator">&amp;</span><span class="token lifetime-annotation symbol">'a</span> <span class="token keyword">str</span><span class="token punctuation">)</span> <span class="token punctuation">-&gt;</span> <span class="token operator">&amp;</span><span class="token lifetime-annotation symbol">'a</span> <span class="token keyword">str</span> <span class="token punctuation">{</span>
+    <span class="token keyword">if</span> x<span class="token punctuation">.</span><span class="token function">len</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">&gt;</span> y<span class="token punctuation">.</span><span class="token function">len</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span> x <span class="token punctuation">}</span> <span class="token keyword">else</span> <span class="token punctuation">{</span> y <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+<span class="token comment">// 'a = "x, y 중 더 짧은 수명만큼 결과 유효"</span>
 
-<pre><code>// 컴파일러가 참조 유효 범위 추적
-// 대부분 자동 추론, 가끔 명시 필요
+<span class="token comment">// 구조체에 참조 담을 때</span>
+<span class="token keyword">struct</span> <span class="token type-definition class-name">Excerpt</span><span class="token operator">&lt;</span><span class="token lifetime-annotation symbol">'a</span><span class="token operator">&gt;</span> <span class="token punctuation">{</span>
+    part<span class="token punctuation">:</span> <span class="token operator">&amp;</span><span class="token lifetime-annotation symbol">'a</span> <span class="token keyword">str</span><span class="token punctuation">,</span>
+<span class="token punctuation">}</span>
 
-<p>fn longest&lt;'a&gt;(x: &amp;'a str, y: &amp;'a str) -&gt; &amp;'a str {<br>    if x.len() &gt; y.len() { x } else { y }<br>}<br>// 'a = "x, y 중 더 짧은 수명만큼 결과 유효"</p>
-
-<p>// 구조체에 참조 담을 때<br>struct Excerpt&lt;'a&gt; {<br>    part: &amp;'a str,<br>}</p>
-
-<p>// 팁: 처음엔 컴파일러가 시키는 대로 'a 붙여. 나중에 이해됨.</code></pre></p>
-
+<span class="token comment">// 팁: 처음엔 컴파일러가 시키는 대로 'a 붙여. 나중에 이해됨.</span>
+</code><button class="copy-code-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon lucide-copy"><rect x="8" y="8" width="14" height="14" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg></button></pre>
 <hr>
+<h2 data-heading="14. Cargo - 빌드 도구" dir="auto">14. Cargo - 빌드 도구</h2>
+<pre class="language-bash"><code class="language-bash is-loaded"><span class="token function">cargo</span> new my_project     <span class="token comment"># 프로젝트 생성</span>
+<span class="token function">cargo</span> build              <span class="token comment"># 빌드</span>
+<span class="token function">cargo</span> build <span class="token parameter variable">--release</span>    <span class="token comment"># 릴리즈 빌드 (최적화)</span>
+<span class="token function">cargo</span> run                <span class="token comment"># 빌드 + 실행</span>
+<span class="token function">cargo</span> <span class="token builtin class-name">test</span>               <span class="token comment"># 테스트</span>
+<span class="token function">cargo</span> <span class="token function">add</span> tokio          <span class="token comment"># 의존성 추가</span>
+<span class="token function">cargo</span> doc <span class="token parameter variable">--open</span>         <span class="token comment"># 문서 생성 및 열기</span>
+</code><button class="copy-code-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon lucide-copy"><rect x="8" y="8" width="14" height="14" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg></button></pre>
+<h3 data-heading="Cargo.toml" dir="auto">Cargo.toml</h3>
+<pre class="language-toml"><code class="language-toml is-loaded"><span class="token punctuation">[</span><span class="token table class-name">package</span><span class="token punctuation">]</span>
+<span class="token key property">name</span> <span class="token punctuation">=</span> <span class="token string">"my_project"</span>
+<span class="token key property">version</span> <span class="token punctuation">=</span> <span class="token string">"0.1.0"</span>
+<span class="token key property">edition</span> <span class="token punctuation">=</span> <span class="token string">"2021"</span>
 
-<h2>14. Cargo - 빌드 도구</h2>
+<span class="token punctuation">[</span><span class="token table class-name">dependencies</span><span class="token punctuation">]</span>
+<span class="token key property">tokio</span> <span class="token punctuation">=</span> <span class="token punctuation">{</span> <span class="token key property">version</span> <span class="token punctuation">=</span> <span class="token string">"1"</span><span class="token punctuation">,</span> <span class="token key property">features</span> <span class="token punctuation">=</span> <span class="token punctuation">[</span><span class="token string">"full"</span><span class="token punctuation">]</span> <span class="token punctuation">}</span>
+<span class="token key property">axum</span> <span class="token punctuation">=</span> <span class="token string">"0.7"</span>
+<span class="token key property">serde</span> <span class="token punctuation">=</span> <span class="token punctuation">{</span> <span class="token key property">version</span> <span class="token punctuation">=</span> <span class="token string">"1"</span><span class="token punctuation">,</span> <span class="token key property">features</span> <span class="token punctuation">=</span> <span class="token punctuation">[</span><span class="token string">"derive"</span><span class="token punctuation">]</span> <span class="token punctuation">}</span>
 
-<pre><code>cargo new my_project     # 프로젝트 생성
-cargo build              # 빌드
-cargo build --release    # 릴리즈 빌드 (최적화)
-cargo run                # 빌드 + 실행
-cargo test               # 테스트
-cargo add tokio          # 의존성 추가
-cargo doc --open         # 문서 생성 및 열기</code></pre>
-
-<h3>Cargo.toml</h3>
-
-<pre><code>[package]
-name = "my_project"
-version = "0.1.0"
-edition = "2021"
-
-<p>[dependencies]<br>tokio = { version = "1", features = ["full"] }<br>axum = "0.7"<br>serde = { version = "1", features = ["derive"] }</p>
-
-<p>[dev-dependencies]<br>criterion = "0.5"  # 벤치마크용</code></pre></p>
-
+<span class="token punctuation">[</span><span class="token table class-name">dev-dependencies</span><span class="token punctuation">]</span>
+<span class="token key property">criterion</span> <span class="token punctuation">=</span> <span class="token string">"0.5"</span>  <span class="token comment"># 벤치마크용</span>
+</code><button class="copy-code-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon lucide-copy"><rect x="8" y="8" width="14" height="14" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg></button></pre>
 <hr>
+<h2 data-heading="15. 자주 쓰는 매크로 &amp; derive" dir="auto">15. 자주 쓰는 매크로 &amp; derive</h2>
+<pre class="language-rust"><code class="language-rust is-loaded"><span class="token attribute attr-name">#[derive(Debug)]</span>           <span class="token comment">// {:?} 포맷 출력</span>
+<span class="token attribute attr-name">#[derive(Clone)]</span>           <span class="token comment">// .clone() 메서드</span>
+<span class="token attribute attr-name">#[derive(Copy)]</span>            <span class="token comment">// 이동 대신 복사 (작은 타입만)</span>
+<span class="token attribute attr-name">#[derive(PartialEq, Eq)]</span>   <span class="token comment">// == 비교</span>
+<span class="token attribute attr-name">#[derive(Hash)]</span>            <span class="token comment">// HashMap 키로 사용</span>
+<span class="token attribute attr-name">#[derive(Default)]</span>         <span class="token comment">// Default::default() 생성</span>
+<span class="token attribute attr-name">#[derive(Serialize, Deserialize)]</span>  <span class="token comment">// serde JSON 변환</span>
 
-<h2>15. 자주 쓰는 매크로 &amp; derive</h2>
+<span class="token attribute attr-name">#[derive(Debug, Clone, PartialEq)]</span>
+<span class="token keyword">struct</span> <span class="token type-definition class-name">User</span> <span class="token punctuation">{</span>
+    name<span class="token punctuation">:</span> <span class="token class-name">String</span><span class="token punctuation">,</span>
+    age<span class="token punctuation">:</span> <span class="token keyword">u32</span><span class="token punctuation">,</span>
+<span class="token punctuation">}</span>
 
-<pre><code>#[derive(Debug)]           // {:?} 포맷 출력
-#[derive(Clone)]           // .clone() 메서드
-#[derive(Copy)]            // 이동 대신 복사 (작은 타입만)
-#[derive(PartialEq, Eq)]   // == 비교
-#[derive(Hash)]            // HashMap 키로 사용
-#[derive(Default)]         // Default::default() 생성
-#[derive(Serialize, Deserialize)]  // serde JSON 변환
-
-<p>#[derive(Debug, Clone, PartialEq)]<br>struct User {<br>    name: String,<br>    age: u32,<br>}</p>
-
-<p>// 매크로<br>println!("출력: {}", value);      // 포맷 출력<br>format!("문자열: {}", value);     // String 생성<br>vec![1, 2, 3];                    // Vec 생성<br>panic!("치명적 에러!");            // 프로그램 중단<br>todo!();                          // 미구현 표시 (panic)<br>unreachable!();                   // 도달 불가 표시</code></pre></p>
-
+<span class="token comment">// 매크로</span>
+<span class="token macro property">println!</span><span class="token punctuation">(</span><span class="token string">"출력: {}"</span><span class="token punctuation">,</span> value<span class="token punctuation">)</span><span class="token punctuation">;</span>      <span class="token comment">// 포맷 출력</span>
+<span class="token macro property">format!</span><span class="token punctuation">(</span><span class="token string">"문자열: {}"</span><span class="token punctuation">,</span> value<span class="token punctuation">)</span><span class="token punctuation">;</span>     <span class="token comment">// String 생성</span>
+<span class="token macro property">vec!</span><span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">,</span> <span class="token number">2</span><span class="token punctuation">,</span> <span class="token number">3</span><span class="token punctuation">]</span><span class="token punctuation">;</span>                    <span class="token comment">// Vec 생성</span>
+<span class="token macro property">panic!</span><span class="token punctuation">(</span><span class="token string">"치명적 에러!"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>            <span class="token comment">// 프로그램 중단</span>
+<span class="token macro property">todo!</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>                          <span class="token comment">// 미구현 표시 (panic)</span>
+<span class="token macro property">unreachable!</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>                   <span class="token comment">// 도달 불가 표시</span>
+</code><button class="copy-code-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon lucide-copy"><rect x="8" y="8" width="14" height="14" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg></button></pre>
 <hr>
-
-<h2>16. 실전 프로젝트 구조 예시</h2>
-
+<h2 data-heading="16. 실전 프로젝트 구조 예시" dir="auto">16. 실전 프로젝트 구조 예시</h2>
 <pre><code>src/
 ├── main.rs
 ├── lib.rs
@@ -421,76 +644,142 @@ edition = "2021"
 │   └── post_service.rs
 └── handlers/
     ├── mod.rs
-    └── api.rs</code></pre>
+    └── api.rs
+</code><button class="copy-code-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon lucide-copy"><rect x="8" y="8" width="14" height="14" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg></button></pre>
+<pre class="language-rust"><code class="language-rust is-loaded"><span class="token comment">// src/lib.rs</span>
+<span class="token keyword">pub</span> <span class="token keyword">mod</span> <span class="token module-declaration namespace">models</span><span class="token punctuation">;</span>
+<span class="token keyword">pub</span> <span class="token keyword">mod</span> <span class="token module-declaration namespace">services</span><span class="token punctuation">;</span>
+<span class="token keyword">pub</span> <span class="token keyword">mod</span> <span class="token module-declaration namespace">handlers</span><span class="token punctuation">;</span>
 
-<pre><code>// src/lib.rs
-pub mod models;
-pub mod services;
-pub mod handlers;
+<span class="token keyword">pub</span> <span class="token keyword">use</span> <span class="token namespace">models<span class="token punctuation">::</span>user<span class="token punctuation">::</span></span><span class="token class-name">User</span><span class="token punctuation">;</span>
+<span class="token keyword">pub</span> <span class="token keyword">use</span> <span class="token namespace">models<span class="token punctuation">::</span>post<span class="token punctuation">::</span></span><span class="token class-name">Post</span><span class="token punctuation">;</span>
 
-<p>pub use models::user::User;<br>pub use models::post::Post;</p>
+<span class="token comment">// src/models/mod.rs</span>
+<span class="token keyword">pub</span> <span class="token keyword">mod</span> <span class="token module-declaration namespace">user</span><span class="token punctuation">;</span>
+<span class="token keyword">pub</span> <span class="token keyword">mod</span> <span class="token module-declaration namespace">post</span><span class="token punctuation">;</span>
 
-<p>// src/models/mod.rs<br>pub mod user;<br>pub mod post;</p>
+<span class="token comment">// src/main.rs</span>
+<span class="token keyword">use</span> <span class="token namespace">my_project<span class="token punctuation">::</span></span><span class="token punctuation">{</span><span class="token class-name">User</span><span class="token punctuation">,</span> <span class="token namespace">services<span class="token punctuation">::</span></span>user_service<span class="token punctuation">}</span><span class="token punctuation">;</span>
 
-<p>// src/main.rs<br>use my<em>project::{User, services::user</em>service};</p>
-
-<p>fn main() {<br>    let user = User { id: 1, name: "햄".into() };<br>    user_service::save(&amp;user);<br>}</code></pre></p>
-
+<span class="token keyword">fn</span> <span class="token function-definition function">main</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">let</span> user <span class="token operator">=</span> <span class="token class-name">User</span> <span class="token punctuation">{</span> id<span class="token punctuation">:</span> <span class="token number">1</span><span class="token punctuation">,</span> name<span class="token punctuation">:</span> <span class="token string">"햄"</span><span class="token punctuation">.</span><span class="token function">into</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">}</span><span class="token punctuation">;</span>
+    <span class="token namespace">user_service<span class="token punctuation">::</span></span><span class="token function">save</span><span class="token punctuation">(</span><span class="token operator">&amp;</span>user<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+</code><button class="copy-code-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon lucide-copy"><rect x="8" y="8" width="14" height="14" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg></button></pre>
 <hr>
-
-<h2>Java → Rust 번역표</h2>
-
+<h2 data-heading="Java → Rust 번역표" dir="auto">Java → Rust 번역표</h2>
 <table>
-<thead><tr><th style="text-align:left">Java</th><th style="text-align:left">Rust</th></tr></thead>
+<thead>
+<tr>
+<th>Java</th>
+<th>Rust</th>
+</tr>
+</thead>
 <tbody>
-<tr><td style="text-align:left"><code>class</code></td><td style="text-align:left"><code>struct</code> + <code>impl</code></td></tr>
-<tr><td style="text-align:left"><code>interface</code></td><td style="text-align:left"><code>trait</code></td></tr>
-<tr><td style="text-align:left"><code>extends/implements</code></td><td style="text-align:left"><code>impl Trait for Struct</code></td></tr>
-<tr><td style="text-align:left"><code>null</code></td><td style="text-align:left"><code>Option&lt;T&gt;</code></td></tr>
-<tr><td style="text-align:left"><code>try-catch</code></td><td style="text-align:left"><code>Result&lt;T, E&gt;</code> + <code>?</code></td></tr>
-<tr><td style="text-align:left"><code>final</code></td><td style="text-align:left">기본값 (mut 없으면 불변)</td></tr>
-<tr><td style="text-align:left"><code>synchronized</code></td><td style="text-align:left"><code>Mutex&lt;T&gt;</code></td></tr>
-<tr><td style="text-align:left"><code>volatile</code></td><td style="text-align:left"><code>Atomic*</code> 타입들</td></tr>
-<tr><td style="text-align:left">GC</td><td style="text-align:left">소유권 시스템</td></tr>
-<tr><td style="text-align:left"><code>new Foo()</code></td><td style="text-align:left"><code>Foo::new()</code> 또는 <code>Foo { }</code></td></tr>
-<tr><td style="text-align:left"><code>this</code></td><td style="text-align:left"><code>self</code></td></tr>
-<tr><td style="text-align:left"><code>static</code> 메서드</td><td style="text-align:left"><code>::</code> 연관 함수</td></tr>
-<tr><td style="text-align:left"><code>package</code></td><td style="text-align:left"><code>mod</code></td></tr>
-<tr><td style="text-align:left"><code>import</code></td><td style="text-align:left"><code>use</code></td></tr>
-<tr><td style="text-align:left"><code>public</code></td><td style="text-align:left"><code>pub</code></td></tr>
-<tr><td style="text-align:left">Maven/Gradle</td><td style="text-align:left">Cargo</td></tr>
-<tr><td style="text-align:left"><code>Optional&lt;T&gt;</code></td><td style="text-align:left"><code>Option&lt;T&gt;</code></td></tr>
-<tr><td style="text-align:left"><code>CompletableFuture</code></td><td style="text-align:left"><code>async</code>/<code>await</code></td></tr>
-<tr><td style="text-align:left"><code>Thread</code></td><td style="text-align:left"><code>std::thread</code></td></tr>
-<tr><td style="text-align:left"><code>ExecutorService</code></td><td style="text-align:left"><code>tokio</code> 런타임</td></tr>
+<tr>
+<td><code class="code-styler-inline">class</code></td>
+<td><code class="code-styler-inline">struct</code> + <code class="code-styler-inline">impl</code></td>
+</tr>
+<tr>
+<td><code class="code-styler-inline">interface</code></td>
+<td><code class="code-styler-inline">trait</code></td>
+</tr>
+<tr>
+<td><code class="code-styler-inline">extends/implements</code></td>
+<td><code class="code-styler-inline">impl Trait for Struct</code></td>
+</tr>
+<tr>
+<td><code class="code-styler-inline">null</code></td>
+<td><code class="code-styler-inline">Option&lt;T&gt;</code></td>
+</tr>
+<tr>
+<td><code class="code-styler-inline">try-catch</code></td>
+<td><code class="code-styler-inline">Result&lt;T, E&gt;</code> + <code class="code-styler-inline">?</code></td>
+</tr>
+<tr>
+<td><code class="code-styler-inline">final</code></td>
+<td>기본값 (mut 없으면 불변)</td>
+</tr>
+<tr>
+<td><code class="code-styler-inline">synchronized</code></td>
+<td><code class="code-styler-inline">Mutex&lt;T&gt;</code></td>
+</tr>
+<tr>
+<td><code class="code-styler-inline">volatile</code></td>
+<td><code class="code-styler-inline">Atomic*</code> 타입들</td>
+</tr>
+<tr>
+<td>GC</td>
+<td>소유권 시스템</td>
+</tr>
+<tr>
+<td><code class="code-styler-inline">new Foo()</code></td>
+<td><code class="code-styler-inline">Foo::new()</code> 또는 <code class="code-styler-inline">Foo { }</code></td>
+</tr>
+<tr>
+<td><code class="code-styler-inline">this</code></td>
+<td><code class="code-styler-inline">self</code></td>
+</tr>
+<tr>
+<td><code class="code-styler-inline">static</code> 메서드</td>
+<td><code class="code-styler-inline">::</code> 연관 함수</td>
+</tr>
+<tr>
+<td><code class="code-styler-inline">package</code></td>
+<td><code class="code-styler-inline">mod</code></td>
+</tr>
+<tr>
+<td><code class="code-styler-inline">import</code></td>
+<td><code class="code-styler-inline">use</code></td>
+</tr>
+<tr>
+<td><code class="code-styler-inline">public</code></td>
+<td><code class="code-styler-inline">pub</code></td>
+</tr>
+<tr>
+<td>Maven/Gradle</td>
+<td>Cargo</td>
+</tr>
+<tr>
+<td><code class="code-styler-inline">Optional&lt;T&gt;</code></td>
+<td><code class="code-styler-inline">Option&lt;T&gt;</code></td>
+</tr>
+<tr>
+<td><code class="code-styler-inline">CompletableFuture</code></td>
+<td><code class="code-styler-inline">async</code>/<code class="code-styler-inline">await</code></td>
+</tr>
+<tr>
+<td><code class="code-styler-inline">Thread</code></td>
+<td><code class="code-styler-inline">std::thread</code></td>
+</tr>
+<tr>
+<td><code class="code-styler-inline">ExecutorService</code></td>
+<td><code class="code-styler-inline">tokio</code> 런타임</td>
+</tr>
 </tbody>
 </table>
 <hr>
+<h2 data-heading="시작하기" dir="auto">시작하기</h2>
+<pre class="language-bash"><code class="language-bash is-loaded"><span class="token comment"># Rust 설치</span>
+<span class="token function">curl</span> <span class="token parameter variable">--proto</span> <span class="token string">'=https'</span> <span class="token parameter variable">--tlsv1.2</span> <span class="token parameter variable">-sSf</span> https://sh.rustup.rs <span class="token operator">|</span> <span class="token function">sh</span>
 
-<h2>시작하기</h2>
+<span class="token comment"># 프로젝트 시작</span>
+<span class="token function">cargo</span> new rust_practice
+<span class="token builtin class-name">cd</span> rust_practice
+<span class="token function">cargo</span> run
 
-<pre><code># Rust 설치
-curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
-
-<h1>프로젝트 시작</h1>
-cargo new rust_practice
-cd rust_practice
-cargo run
-
-<h1>IDE: VS Code + rust-analyzer 확장 추천</code></pre></h1>
-
+<span class="token comment"># IDE: VS Code + rust-analyzer 확장 추천</span>
+</code><button class="copy-code-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon lucide-copy"><rect x="8" y="8" width="14" height="14" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg></button></pre>
 <hr>
-
-<h2>추천 학습 순서</h2>
-
-<ol><li>✅ 이 문서로 개념 파악</li>
-<li>📖 <a href="https://doc.rust-lang.org/book/">Rust Book</a> - 공식 문서</li>
-<li>🏋️ <a href="https://github.com/rust-lang/rustlings">Rustlings</a> - 연습 문제</li>
-<li>🔧 작은 프로젝트 직접 만들어보기</li>
-<li>🌐 웹 프레임워크(Axum, Actix-web) 튜토리얼 따라하기</li>
+<h2 data-heading="추천 학습 순서" dir="auto">추천 학습 순서</h2>
+<ol>
+<li dir="auto">✅ 이 문서로 개념 파악</li>
+<li dir="auto">📖 <a data-tooltip-position="top" aria-label="https://doc.rust-lang.org/book/" rel="noopener nofollow" class="external-link" href="https://doc.rust-lang.org/book/" target="_blank">Rust Book</a> - 공식 문서</li>
+<li dir="auto">🏋️ <a data-tooltip-position="top" aria-label="https://github.com/rust-lang/rustlings" rel="noopener nofollow" class="external-link" href="https://github.com/rust-lang/rustlings" target="_blank">Rustlings</a> - 연습 문제</li>
+<li dir="auto">🔧 작은 프로젝트 직접 만들어보기</li>
+<li dir="auto">🌐 웹 프레임워크(Axum, Actix-web) 튜토리얼 따라하기</li>
 </ol>
 <hr>
-
-<p><em>Java 5년차 기준 1시간 내 웹 프레임워크 기여 + 멀티스레드 코딩 가능 목표 가이드</em></p>
+<p dir="auto"><em>Java 5년차 기준 1시간 내 웹 프레임워크 기여 + 멀티스레드 코딩 가능 목표 가이드</em></p>
 </body>
 </html>
