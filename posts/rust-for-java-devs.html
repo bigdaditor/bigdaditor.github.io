@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>rust-for-java-devs</title>
+    <style>
+        * { box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            line-height: 1.6;
+            max-width: 750px;
+            margin: 0 auto;
+            padding: 2rem 1rem;
+            color: #333;
+        }
+        h1, h2, h3, h4, h5, h6 { margin-top: 1.5em; margin-bottom: 0.5em; }
+        h1 { font-size: 2em; border-bottom: 1px solid #eee; padding-bottom: 0.3em; }
+        h2 { font-size: 1.5em; }
+        a { color: #0066cc; }
+        code {
+            background: #f4f4f4;
+            padding: 0.2em 0.4em;
+            border-radius: 3px;
+            font-size: 0.9em;
+        }
+        pre {
+            background: #f4f4f4;
+            padding: 1em;
+            border-radius: 5px;
+            overflow-x: auto;
+        }
+        pre code { background: none; padding: 0; }
+        blockquote {
+            border-left: 3px solid #ddd;
+            margin: 1em 0;
+            padding-left: 1em;
+            color: #666;
+        }
+        img { max-width: 100%; height: auto; }
+        table { border-collapse: collapse; width: 100%; margin: 1em 0; }
+        th, td { border: 1px solid #ddd; padding: 0.5em; text-align: left; }
+        th { background: #f4f4f4; }
+        hr { border: none; border-top: 1px solid #eee; margin: 2em 0; }
+    </style>
+</head>
+<body>
+<h1>Rust 1시간 속성 가이드 - Java 5년차 개발자용</h1>
+
+<blockquote><strong>목표</strong>: 웹 프레임워크 기여 가능 + 멀티스레드 코딩 가능 수준까지</blockquote>
+
+<hr>
+
+<h2>1. 소유권 (Ownership) - Rust의 핵심</h2>
+
+<p>Java는 GC가 메모리 관리. Rust는 <strong>컴파일 타임에 메모리 관리 강제</strong>.</p>
+
+<pre><code>fn main() {
+    let s1 = String::from("햄");
+    let s2 = s1;  // s1의 소유권이 s2로 "이동" (move)
+    // println!("{}", s1);  // ❌ 컴파일 에러! s1은 이제 무효
+    println!("{}", s2);     // ✅ OK
+}</code></pre>
+
+<p><strong>Java 마인드 번역</strong>: <code>s1 = null</code>이 자동으로 된다고 생각. 단, 컴파일러가 강제함.</p>
+
+<hr>
+
+<h2>2. 빌림 (Borrowing) - 참조의 규칙</h2>
+
+<pre><code>fn main() {
+    let s = String::from("햄");
+    
+    // 불변 빌림 - 여러 개 가능
+    let r1 = &amp;s;
+    let r2 = &amp;s;  // ✅ OK
+    
+    // 가변 빌림 - 딱 하나만
+    let mut s2 = String::from("햄");
+    let r3 = &amp;mut s2;
+    // let r4 = &amp;mut s2;  // ❌ 컴파일 에러!
+}</code></pre>
+
+<h3>핵심 규칙</h3>
+| 규칙 | 설명 |
+|------|------|
+| 불변 참조 <code>&amp;T</code> | 여러 개 OK |
+| 가변 참조 <code>&amp;mut T</code> | 딱 하나만 |
+| 동시 존재 | 불변 + 가변 동시에 불가 |
+
+<p>→ <strong>data race를 컴파일 타임에 방지</strong></p>
+
+<hr>
+
+<h2>3. <code>::</code> 연산자와 <code>From</code> 트레이트</h2>
+
+<h3><code>::</code> = 연관 함수 호출 (Java의 static 메서드)</h3>
+
+<pre><code>// String::from은 이렇게 구현되어 있음
+impl String {
+    pub fn from(s: &amp;str) -&gt; String {
+        // &amp;str을 String으로 변환
+    }
+}
+
+<p>// 호출<br>let s = String::from("햄");  // Java: String.from("햄")</p>
+
+<p>// new도 마찬가지<br>impl User {<br>    pub fn new(name: String) -&gt; Self {<br>        User { name }<br>    }<br>}<br>let user = User::new(String::from("햄"));</code></pre></p>
+
+<h3><code>From</code> 트레이트 - 타입 변환 표준</h3>
+
+<pre><code>// From을 구현하면 Into도 자동 구현
+let s1 = String::from("햄");   // from 사용
+let s2: String = "햄".into();  // into 사용 (타입 명시 필요)</code></pre>
+
+<h3><code>&amp;str</code> vs <code>String</code></h3>
+| 타입 | 설명 | Java 대응 |
+|------|------|----------|
+| <code>&amp;str</code> | 문자열 슬라이스 (불변, 어디든 위치 가능) | - |
+| <code>String</code> | 힙 할당 가변 문자열 | <code>String</code> |
+
+<hr>
+
+<h2>4. 모듈 시스템 &amp; Import/Export</h2>
+
+<h3>파일 구조</h3>
+
+<pre><code>my_project/
+├── Cargo.toml
+└── src/
+    ├── main.rs          # 바이너리 진입점
+    ├── lib.rs           # 라이브러리 루트
+    ├── user.rs          # user 모듈
+    └── services/        # 서브 모듈 디렉토리
+        ├── mod.rs       # services 모듈 정의
+        └── auth.rs      # services::auth 모듈</code></pre>
+
+<h3>모듈 선언 &amp; 내보내기</h3>
+
+<pre><code>// src/user.rs
+pub struct User {          // pub = public
+    pub name: String,      // 필드도 pub 붙여야 외부 접근 가능
+    age: u32,              // private (pub 없음)
+}
+
+<p>impl User {<br>    pub fn new(name: String, age: u32) -&gt; Self {<br>        User { name, age }<br>    }<br>    <br>    pub fn greet(&amp;self) -&gt; String {<br>        format!("안녕 난 {}", self.name)<br>    }<br>    <br>    fn secret(&amp;self) {}  // private 메서드<br>}</p>
+
+<p>pub fn some_function() {}  // public 함수</code></pre></p>
+
+<h3>모듈 등록 (⚠️ Java와 다른 점!)</h3>
+
+<pre><code>// src/main.rs 또는 src/lib.rs
+mod user;      // user.rs 모듈로 등록 (명시 필수!)
+mod services;  // services/mod.rs 모듈로 등록
+
+<p>fn main() {<br>    let u = user::User::new(String::from("햄"), 20);<br>}</code></pre></p>
+
+<h3>서브 모듈</h3>
+
+<pre><code>// src/services/mod.rs
+pub mod auth;  // auth.rs를 서브모듈로 등록 + 외부 공개
+
+<p>// src/services/auth.rs<br>pub fn login(id: &amp;str) -&gt; bool {<br>    true<br>}</code></pre></p>
+
+<h3>use - Import</h3>
+
+<pre><code>// 기본
+use crate::user::User;       // crate = 현재 프로젝트 루트
+use crate::services::auth;
+
+<p>// 여러 개<br>use std::collections::{HashMap, HashSet, VecDeque};</p>
+
+<p>// 전부 (비추)<br>use std::collections::*;</p>
+
+<p>// 별칭<br>use std::collections::HashMap as Map;</p>
+
+<p>// 중첩<br>use std::{<br>    io::{self, Read, Write},  // self = std::io 자체도<br>    fs::File,<br>};</code></pre></p>
+
+<h3>pub use - 재내보내기</h3>
+
+<pre><code>// src/lib.rs
+mod user;
+pub use user::User;  // 외부에서 my_crate::User로 접근 가능</code></pre>
+
+<h3>가시성 정리</h3>
+
+<p>| Rust | Java 대응 | 범위 |<br>|------|----------|------|<br>| <code>pub</code> | <code>public</code> | 어디서든 |<br>| (없음) | <code>private</code> | 같은 모듈 |<br>| <code>pub(crate)</code> | package-private | 같은 크레이트 |<br>| <code>pub(super)</code> | protected 비슷 | 부모 모듈까지 |</p>
+
+<h3>외부 크레이트</h3>
+
+<pre><code># Cargo.toml
+[dependencies]
+serde = "1.0"
+tokio = { version = "1", features = ["full"] }</code></pre>
+
+<pre><code>use serde::{Serialize, Deserialize};
+use tokio::fs::File;</code></pre>
+
+<hr>
+
+<h2>5. 타입 시스템 - trait</h2>
+
+<pre><code>// Java interface = Rust trait
+trait Greet {
+    fn greet(&amp;self) -&gt; String;
+}
+
+<p>struct Developer {<br>    name: String,<br>}</p>
+
+<p>impl Greet for Developer {<br>    fn greet(&amp;self) -&gt; String {<br>        format!("{}입니다", self.name)<br>    }<br>}</p>
+
+<p>// 제네릭 + trait bound (Java의 &lt;T extends Interface&gt;)<br>fn say_hello&lt;T: Greet&gt;(entity: &amp;T) {<br>    println!("{}", entity.greet());<br>}</p>
+
+<p>// 여러 trait bound<br>fn do_something&lt;T: Clone + Debug&gt;(item: T) {}</p>
+
+<p>// where 절 (복잡할 때)<br>fn complex&lt;T, U&gt;(t: T, u: U)<br>where<br>    T: Clone + Debug,<br>    U: Serialize,<br>{}</code></pre></p>
+
+<hr>
+
+<h2>6. 에러 처리 - Exception 없음</h2>
+
+<pre><code>fn divide(a: i32, b: i32) -&gt; Result&lt;i32, String&gt; {
+    if b == 0 {
+        Err("0으로 나누기 불가".to_string())
+    } else {
+        Ok(a / b)
+    }
+}
+
+<p>fn main() {<br>    // 방법 1: match<br>    match divide(10, 0) {<br>        Ok(result) =&gt; println!("결과: {}", result),<br>        Err(e) =&gt; println!("에러: {}", e),<br>    }<br>    <br>    // 방법 2: ? 연산자 (에러 전파, throws 같은 거)<br>    fn calc() -&gt; Result&lt;i32, String&gt; {<br>        let x = divide(10, 2)?;  // 에러면 바로 return Err<br>        Ok(x * 2)<br>    }<br>    <br>    // 방법 3: unwrap (panic 발생, 프로덕션 비추)<br>    let result = divide(10, 2).unwrap();<br>    <br>    // 방법 4: unwrap_or (기본값)<br>    let result = divide(10, 0).unwrap_or(0);<br>}</code></pre></p>
+
+<hr>
+
+<h2>7. Option - null 없음</h2>
+
+<pre><code>fn find_user(id: i32) -&gt; Option&lt;String&gt; {
+    if id == 1 {
+        Some("햄".to_string())
+    } else {
+        None
+    }
+}
+
+<p>fn main() {<br>    // if let 패턴<br>    if let Some(name) = find_user(1) {<br>        println!("찾음: {}", name);<br>    }<br>    <br>    // match<br>    match find_user(1) {<br>        Some(name) =&gt; println!("{}", name),<br>        None =&gt; println!("없음"),<br>    }<br>    <br>    // unwrap_or<br>    let name = find<em>user(999).unwrap</em>or("익명".to_string());<br>    <br>    // map (체이닝)<br>    let upper = find<em>user(1).map(|n| n.to</em>uppercase());<br>}</code></pre></p>
+
+<hr>
+
+<h2>8. 구조체 &amp; impl</h2>
+
+<pre><code>struct User {
+    name: String,
+    age: u32,
+}
+
+<p>impl User {<br>    // 생성자 (연관 함수)<br>    fn new(name: String, age: u32) -&gt; Self {<br>        User { name, age }<br>    }<br>    <br>    // 인스턴스 메서드 (&amp;self = this, 불변)<br>    fn introduce(&amp;self) -&gt; String {<br>        format!("{}살 {}", self.age, self.name)<br>    }<br>    <br>    // 가변 메서드 (&amp;mut self)<br>    fn birthday(&amp;mut self) {<br>        self.age += 1;<br>    }<br>    <br>    // 소유권 가져가는 메서드 (self)<br>    fn destroy(self) {<br>        println!("{} 삭제됨", self.name);<br>        // 이후 self 사용 불가<br>    }<br>}</code></pre></p>
+
+<hr>
+
+<h2>9. Enum - Java enum의 강화판</h2>
+
+<pre><code>// 각 variant가 다른 데이터 보유 가능
+enum Message {
+    Quit,                        // 데이터 없음
+    Move { x: i32, y: i32 },     // 구조체 형태
+    Write(String),               // 튜플 형태
+    ChangeColor(i32, i32, i32),  // 여러 값
+}
+
+<p>fn process(msg: Message) {<br>    match msg {<br>        Message::Quit =&gt; println!("종료"),<br>        Message::Move { x, y } =&gt; println!("이동: {}, {}", x, y),<br>        Message::Write(text) =&gt; println!("쓰기: {}", text),<br>        Message::ChangeColor(r, g, b) =&gt; println!("색: {}/{}/{}", r, g, b),<br>    }<br>}</p>
+
+<p>// Result, Option도 사실 enum<br>enum Option&lt;T&gt; {<br>    Some(T),<br>    None,<br>}</p>
+
+<p>enum Result&lt;T, E&gt; {<br>    Ok(T),<br>    Err(E),<br>}</code></pre></p>
+
+<hr>
+
+<h2>10. 멀티스레딩</h2>
+
+<pre><code>use std::thread;
+use std::sync::{Arc, Mutex};
+
+<p>fn main() {<br>    // Arc = Atomic Reference Count (스레드 안전 참조 카운트)<br>    // Mutex = 뮤텍스 (Java synchronized 비슷)<br>    let counter = Arc::new(Mutex::new(0));<br>    let mut handles = vec![];</p>
+
+<p>for _ in 0..10 {<br>        let counter = Arc::clone(&amp;counter);  // Arc 복제<br>        let handle = thread::spawn(move || {<br>            let mut num = counter.lock().unwrap();<br>            *num += 1;<br>        });<br>        handles.push(handle);<br>    }</p>
+
+<p>for handle in handles {<br>        handle.join().unwrap();  // 스레드 종료 대기<br>    }</p>
+
+<p>println!("결과: {}", *counter.lock().unwrap());  // 10<br>}</code></pre></p>
+
+<h3>스레드 안전 타입</h3>
+
+<p>| 타입 | 용도 |<br>|------|------|<br>| <code>Arc&lt;T&gt;</code> | 여러 스레드에서 소유권 공유 |<br>| <code>Mutex&lt;T&gt;</code> | 상호 배제 (한 번에 하나만 접근) |<br>| <code>RwLock&lt;T&gt;</code> | 읽기 여러 개, 쓰기 하나 |<br>| <code>Atomic*</code> | 원자적 연산 (AtomicBool, AtomicUsize 등) |</p>
+
+<p><strong>Java와 차이점</strong>: 컴파일러가 <code>Send</code>, <code>Sync</code> trait으로 data race 가능성을 <strong>컴파일 에러로 잡음</strong>.</p>
+
+<hr>
+
+<h2>11. 채널 - 스레드 간 통신</h2>
+
+<pre><code>use std::sync::mpsc;  // multi-producer, single-consumer
+use std::thread;
+
+<p>fn main() {<br>    let (tx, rx) = mpsc::channel();</p>
+
+<p>// 송신측<br>    thread::spawn(move || {<br>        tx.send("햄에서 보냄".to_string()).unwrap();<br>    });</p>
+
+<p>// 수신측<br>    let received = rx.recv().unwrap();<br>    println!("받음: {}", received);<br>    <br>    // 여러 producer<br>    let (tx, rx) = mpsc::channel();<br>    let tx2 = tx.clone();  // 송신자 복제 가능<br>    <br>    thread::spawn(move || tx.send(1).unwrap());<br>    thread::spawn(move || tx2.send(2).unwrap());<br>    <br>    for received in rx {<br>        println!("{}", received);<br>    }<br>}</code></pre></p>
+
+<hr>
+
+<h2>12. Async/Await - 웹 프레임워크 필수</h2>
+
+<pre><code>// async 함수 정의
+async fn fetch_data() -&gt; Result&lt;String, Error&gt; {
+    let response = reqwest::get("https://api.example.com")
+        .await?   // 비동기 대기
+        .text()
+        .await?;
+    Ok(response)
+}
+
+<p>// Axum 웹 프레임워크 예시<br>use axum::{routing::get, Router};</p>
+
+<p>async fn hello() -&gt; &amp;'static str {<br>    "Hello, 햄!"<br>}</p>
+
+<p>#[tokio::main]  // async main을 위한 매크로<br>async fn main() {<br>    let app = Router::new()<br>        .route("/", get(hello));<br>    <br>    let listener = tokio::net::TcpListener::bind("0.0.0.0:3000")<br>        .await<br>        .unwrap();<br>    axum::serve(listener, app).await.unwrap();<br>}</code></pre></p>
+
+<h3>주요 async 런타임</h3>
+
+<p>| 런타임 | 특징 |<br>|--------|------|<br>| <code>tokio</code> | 가장 인기, 대부분 웹 프레임워크 사용 |<br>| <code>async-std</code> | std 라이브러리 스타일 |</p>
+
+<hr>
+
+<h2>13. 라이프타임 - 처음엔 컴파일러 따라가기</h2>
+
+<pre><code>// 컴파일러가 참조 유효 범위 추적
+// 대부분 자동 추론, 가끔 명시 필요
+
+<p>fn longest&lt;'a&gt;(x: &amp;'a str, y: &amp;'a str) -&gt; &amp;'a str {<br>    if x.len() &gt; y.len() { x } else { y }<br>}<br>// 'a = "x, y 중 더 짧은 수명만큼 결과 유효"</p>
+
+<p>// 구조체에 참조 담을 때<br>struct Excerpt&lt;'a&gt; {<br>    part: &amp;'a str,<br>}</p>
+
+<p>// 팁: 처음엔 컴파일러가 시키는 대로 'a 붙여. 나중에 이해됨.</code></pre></p>
+
+<hr>
+
+<h2>14. Cargo - 빌드 도구</h2>
+
+<pre><code>cargo new my_project     # 프로젝트 생성
+cargo build              # 빌드
+cargo build --release    # 릴리즈 빌드 (최적화)
+cargo run                # 빌드 + 실행
+cargo test               # 테스트
+cargo add tokio          # 의존성 추가
+cargo doc --open         # 문서 생성 및 열기</code></pre>
+
+<h3>Cargo.toml</h3>
+
+<pre><code>[package]
+name = "my_project"
+version = "0.1.0"
+edition = "2021"
+
+<p>[dependencies]<br>tokio = { version = "1", features = ["full"] }<br>axum = "0.7"<br>serde = { version = "1", features = ["derive"] }</p>
+
+<p>[dev-dependencies]<br>criterion = "0.5"  # 벤치마크용</code></pre></p>
+
+<hr>
+
+<h2>15. 자주 쓰는 매크로 &amp; derive</h2>
+
+<pre><code>#[derive(Debug)]           // {:?} 포맷 출력
+#[derive(Clone)]           // .clone() 메서드
+#[derive(Copy)]            // 이동 대신 복사 (작은 타입만)
+#[derive(PartialEq, Eq)]   // == 비교
+#[derive(Hash)]            // HashMap 키로 사용
+#[derive(Default)]         // Default::default() 생성
+#[derive(Serialize, Deserialize)]  // serde JSON 변환
+
+<p>#[derive(Debug, Clone, PartialEq)]<br>struct User {<br>    name: String,<br>    age: u32,<br>}</p>
+
+<p>// 매크로<br>println!("출력: {}", value);      // 포맷 출력<br>format!("문자열: {}", value);     // String 생성<br>vec![1, 2, 3];                    // Vec 생성<br>panic!("치명적 에러!");            // 프로그램 중단<br>todo!();                          // 미구현 표시 (panic)<br>unreachable!();                   // 도달 불가 표시</code></pre></p>
+
+<hr>
+
+<h2>16. 실전 프로젝트 구조 예시</h2>
+
+<pre><code>src/
+├── main.rs
+├── lib.rs
+├── models/
+│   ├── mod.rs
+│   ├── user.rs
+│   └── post.rs
+├── services/
+│   ├── mod.rs
+│   ├── user_service.rs
+│   └── post_service.rs
+└── handlers/
+    ├── mod.rs
+    └── api.rs</code></pre>
+
+<pre><code>// src/lib.rs
+pub mod models;
+pub mod services;
+pub mod handlers;
+
+<p>pub use models::user::User;<br>pub use models::post::Post;</p>
+
+<p>// src/models/mod.rs<br>pub mod user;<br>pub mod post;</p>
+
+<p>// src/main.rs<br>use my<em>project::{User, services::user</em>service};</p>
+
+<p>fn main() {<br>    let user = User { id: 1, name: "햄".into() };<br>    user_service::save(&amp;user);<br>}</code></pre></p>
+
+<hr>
+
+<h2>Java → Rust 번역표</h2>
+
+<p>| Java | Rust |<br>|------|------|<br>| <code>class</code> | <code>struct</code> + <code>impl</code> |<br>| <code>interface</code> | <code>trait</code> |<br>| <code>extends/implements</code> | <code>impl Trait for Struct</code> |<br>| <code>null</code> | <code>Option&lt;T&gt;</code> |<br>| <code>try-catch</code> | <code>Result&lt;T, E&gt;</code> + <code>?</code> |<br>| <code>final</code> | 기본값 (mut 없으면 불변) |<br>| <code>synchronized</code> | <code>Mutex&lt;T&gt;</code> |<br>| <code>volatile</code> | <code>Atomic*</code> 타입들 |<br>| GC | 소유권 시스템 |<br>| <code>new Foo()</code> | <code>Foo::new()</code> 또는 <code>Foo { }</code> |<br>| <code>this</code> | <code>self</code> |<br>| <code>static</code> 메서드 | <code>::</code> 연관 함수 |<br>| <code>package</code> | <code>mod</code> |<br>| <code>import</code> | <code>use</code> |<br>| <code>public</code> | <code>pub</code> |<br>| Maven/Gradle | Cargo |<br>| <code>Optional&lt;T&gt;</code> | <code>Option&lt;T&gt;</code> |<br>| <code>CompletableFuture</code> | <code>async</code>/<code>await</code> |<br>| <code>Thread</code> | <code>std::thread</code> |<br>| <code>ExecutorService</code> | <code>tokio</code> 런타임 |</p>
+
+<hr>
+
+<h2>시작하기</h2>
+
+<pre><code># Rust 설치
+curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
+
+<h1>프로젝트 시작</h1>
+cargo new rust_practice
+cd rust_practice
+cargo run
+
+<h1>IDE: VS Code + rust-analyzer 확장 추천</code></pre></h1>
+
+<hr>
+
+<h2>추천 학습 순서</h2>
+
+<ol><li>✅ 이 문서로 개념 파악</li>
+<li>📖 <a href="https://doc.rust-lang.org/book/">Rust Book</a> - 공식 문서</li>
+<li>🏋️ <a href="https://github.com/rust-lang/rustlings">Rustlings</a> - 연습 문제</li>
+<li>🔧 작은 프로젝트 직접 만들어보기</li>
+<li>🌐 웹 프레임워크(Axum, Actix-web) 튜토리얼 따라하기</li>
+</ol>
+<hr>
+
+<p><em>Java 5년차 기준 1시간 내 웹 프레임워크 기여 + 멀티스레드 코딩 가능 목표 가이드</em></p>
+</body>
+</html>
