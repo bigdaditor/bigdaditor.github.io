@@ -82,13 +82,15 @@
 }</code></pre>
 
 <h3>핵심 규칙</h3>
-| 규칙 | 설명 |
-|------|------|
-| 불변 참조 <code>&amp;T</code> | 여러 개 OK |
-| 가변 참조 <code>&amp;mut T</code> | 딱 하나만 |
-| 동시 존재 | 불변 + 가변 동시에 불가 |
-
-<p>→ <strong>data race를 컴파일 타임에 방지</strong></p>
+<table>
+<thead><tr><th style="text-align:left">규칙</th><th style="text-align:left">설명</th></tr></thead>
+<tbody>
+<tr><td style="text-align:left">불변 참조 <code>&amp;T</code></td><td style="text-align:left">여러 개 OK</td></tr>
+<tr><td style="text-align:left">가변 참조 <code>&amp;mut T</code></td><td style="text-align:left">딱 하나만</td></tr>
+<tr><td style="text-align:left">동시 존재</td><td style="text-align:left">불변 + 가변 동시에 불가</td></tr>
+</tbody>
+</table>
+→ <strong>data race를 컴파일 타임에 방지</strong>
 
 <hr>
 
@@ -114,11 +116,13 @@ let s1 = String::from("햄");   // from 사용
 let s2: String = "햄".into();  // into 사용 (타입 명시 필요)</code></pre>
 
 <h3><code>&amp;str</code> vs <code>String</code></h3>
-| 타입 | 설명 | Java 대응 |
-|------|------|----------|
-| <code>&amp;str</code> | 문자열 슬라이스 (불변, 어디든 위치 가능) | - |
-| <code>String</code> | 힙 할당 가변 문자열 | <code>String</code> |
-
+<table>
+<thead><tr><th style="text-align:left">타입</th><th style="text-align:left">설명</th><th style="text-align:left">Java 대응</th></tr></thead>
+<tbody>
+<tr><td style="text-align:left"><code>&amp;str</code></td><td style="text-align:left">문자열 슬라이스 (불변, 어디든 위치 가능)</td><td style="text-align:left">-</td></tr>
+<tr><td style="text-align:left"><code>String</code></td><td style="text-align:left">힙 할당 가변 문자열</td><td style="text-align:left"><code>String</code></td></tr>
+</tbody>
+</table>
 <hr>
 
 <h2>4. 모듈 시스템 &amp; Import/Export</h2>
@@ -184,8 +188,15 @@ pub use user::User;  // 외부에서 my_crate::User로 접근 가능</code></pre
 
 <h3>가시성 정리</h3>
 
-<p>| Rust | Java 대응 | 범위 |<br>|------|----------|------|<br>| <code>pub</code> | <code>public</code> | 어디서든 |<br>| (없음) | <code>private</code> | 같은 모듈 |<br>| <code>pub(crate)</code> | package-private | 같은 크레이트 |<br>| <code>pub(super)</code> | protected 비슷 | 부모 모듈까지 |</p>
-
+<table>
+<thead><tr><th style="text-align:left">Rust</th><th style="text-align:left">Java 대응</th><th style="text-align:left">범위</th></tr></thead>
+<tbody>
+<tr><td style="text-align:left"><code>pub</code></td><td style="text-align:left"><code>public</code></td><td style="text-align:left">어디서든</td></tr>
+<tr><td style="text-align:left">(없음)</td><td style="text-align:left"><code>private</code></td><td style="text-align:left">같은 모듈</td></tr>
+<tr><td style="text-align:left"><code>pub(crate)</code></td><td style="text-align:left">package-private</td><td style="text-align:left">같은 크레이트</td></tr>
+<tr><td style="text-align:left"><code>pub(super)</code></td><td style="text-align:left">protected 비슷</td><td style="text-align:left">부모 모듈까지</td></tr>
+</tbody>
+</table>
 <h3>외부 크레이트</h3>
 
 <pre><code># Cargo.toml
@@ -289,9 +300,16 @@ use std::sync::{Arc, Mutex};
 
 <h3>스레드 안전 타입</h3>
 
-<p>| 타입 | 용도 |<br>|------|------|<br>| <code>Arc&lt;T&gt;</code> | 여러 스레드에서 소유권 공유 |<br>| <code>Mutex&lt;T&gt;</code> | 상호 배제 (한 번에 하나만 접근) |<br>| <code>RwLock&lt;T&gt;</code> | 읽기 여러 개, 쓰기 하나 |<br>| <code>Atomic*</code> | 원자적 연산 (AtomicBool, AtomicUsize 등) |</p>
-
-<p><strong>Java와 차이점</strong>: 컴파일러가 <code>Send</code>, <code>Sync</code> trait으로 data race 가능성을 <strong>컴파일 에러로 잡음</strong>.</p>
+<table>
+<thead><tr><th style="text-align:left">타입</th><th style="text-align:left">용도</th></tr></thead>
+<tbody>
+<tr><td style="text-align:left"><code>Arc&lt;T&gt;</code></td><td style="text-align:left">여러 스레드에서 소유권 공유</td></tr>
+<tr><td style="text-align:left"><code>Mutex&lt;T&gt;</code></td><td style="text-align:left">상호 배제 (한 번에 하나만 접근)</td></tr>
+<tr><td style="text-align:left"><code>RwLock&lt;T&gt;</code></td><td style="text-align:left">읽기 여러 개, 쓰기 하나</td></tr>
+<tr><td style="text-align:left"><code>Atomic*</code></td><td style="text-align:left">원자적 연산 (AtomicBool, AtomicUsize 등)</td></tr>
+</tbody>
+</table>
+<strong>Java와 차이점</strong>: 컴파일러가 <code>Send</code>, <code>Sync</code> trait으로 data race 가능성을 <strong>컴파일 에러로 잡음</strong>.
 
 <hr>
 
@@ -327,8 +345,13 @@ async fn fetch_data() -&gt; Result&lt;String, Error&gt; {
 
 <h3>주요 async 런타임</h3>
 
-<p>| 런타임 | 특징 |<br>|--------|------|<br>| <code>tokio</code> | 가장 인기, 대부분 웹 프레임워크 사용 |<br>| <code>async-std</code> | std 라이브러리 스타일 |</p>
-
+<table>
+<thead><tr><th style="text-align:left">런타임</th><th style="text-align:left">특징</th></tr></thead>
+<tbody>
+<tr><td style="text-align:left"><code>tokio</code></td><td style="text-align:left">가장 인기, 대부분 웹 프레임워크 사용</td></tr>
+<tr><td style="text-align:left"><code>async-std</code></td><td style="text-align:left">std 라이브러리 스타일</td></tr>
+</tbody>
+</table>
 <hr>
 
 <h2>13. 라이프타임 - 처음엔 컴파일러 따라가기</h2>
@@ -417,8 +440,31 @@ pub mod handlers;
 
 <h2>Java → Rust 번역표</h2>
 
-<p>| Java | Rust |<br>|------|------|<br>| <code>class</code> | <code>struct</code> + <code>impl</code> |<br>| <code>interface</code> | <code>trait</code> |<br>| <code>extends/implements</code> | <code>impl Trait for Struct</code> |<br>| <code>null</code> | <code>Option&lt;T&gt;</code> |<br>| <code>try-catch</code> | <code>Result&lt;T, E&gt;</code> + <code>?</code> |<br>| <code>final</code> | 기본값 (mut 없으면 불변) |<br>| <code>synchronized</code> | <code>Mutex&lt;T&gt;</code> |<br>| <code>volatile</code> | <code>Atomic*</code> 타입들 |<br>| GC | 소유권 시스템 |<br>| <code>new Foo()</code> | <code>Foo::new()</code> 또는 <code>Foo { }</code> |<br>| <code>this</code> | <code>self</code> |<br>| <code>static</code> 메서드 | <code>::</code> 연관 함수 |<br>| <code>package</code> | <code>mod</code> |<br>| <code>import</code> | <code>use</code> |<br>| <code>public</code> | <code>pub</code> |<br>| Maven/Gradle | Cargo |<br>| <code>Optional&lt;T&gt;</code> | <code>Option&lt;T&gt;</code> |<br>| <code>CompletableFuture</code> | <code>async</code>/<code>await</code> |<br>| <code>Thread</code> | <code>std::thread</code> |<br>| <code>ExecutorService</code> | <code>tokio</code> 런타임 |</p>
-
+<table>
+<thead><tr><th style="text-align:left">Java</th><th style="text-align:left">Rust</th></tr></thead>
+<tbody>
+<tr><td style="text-align:left"><code>class</code></td><td style="text-align:left"><code>struct</code> + <code>impl</code></td></tr>
+<tr><td style="text-align:left"><code>interface</code></td><td style="text-align:left"><code>trait</code></td></tr>
+<tr><td style="text-align:left"><code>extends/implements</code></td><td style="text-align:left"><code>impl Trait for Struct</code></td></tr>
+<tr><td style="text-align:left"><code>null</code></td><td style="text-align:left"><code>Option&lt;T&gt;</code></td></tr>
+<tr><td style="text-align:left"><code>try-catch</code></td><td style="text-align:left"><code>Result&lt;T, E&gt;</code> + <code>?</code></td></tr>
+<tr><td style="text-align:left"><code>final</code></td><td style="text-align:left">기본값 (mut 없으면 불변)</td></tr>
+<tr><td style="text-align:left"><code>synchronized</code></td><td style="text-align:left"><code>Mutex&lt;T&gt;</code></td></tr>
+<tr><td style="text-align:left"><code>volatile</code></td><td style="text-align:left"><code>Atomic*</code> 타입들</td></tr>
+<tr><td style="text-align:left">GC</td><td style="text-align:left">소유권 시스템</td></tr>
+<tr><td style="text-align:left"><code>new Foo()</code></td><td style="text-align:left"><code>Foo::new()</code> 또는 <code>Foo { }</code></td></tr>
+<tr><td style="text-align:left"><code>this</code></td><td style="text-align:left"><code>self</code></td></tr>
+<tr><td style="text-align:left"><code>static</code> 메서드</td><td style="text-align:left"><code>::</code> 연관 함수</td></tr>
+<tr><td style="text-align:left"><code>package</code></td><td style="text-align:left"><code>mod</code></td></tr>
+<tr><td style="text-align:left"><code>import</code></td><td style="text-align:left"><code>use</code></td></tr>
+<tr><td style="text-align:left"><code>public</code></td><td style="text-align:left"><code>pub</code></td></tr>
+<tr><td style="text-align:left">Maven/Gradle</td><td style="text-align:left">Cargo</td></tr>
+<tr><td style="text-align:left"><code>Optional&lt;T&gt;</code></td><td style="text-align:left"><code>Option&lt;T&gt;</code></td></tr>
+<tr><td style="text-align:left"><code>CompletableFuture</code></td><td style="text-align:left"><code>async</code>/<code>await</code></td></tr>
+<tr><td style="text-align:left"><code>Thread</code></td><td style="text-align:left"><code>std::thread</code></td></tr>
+<tr><td style="text-align:left"><code>ExecutorService</code></td><td style="text-align:left"><code>tokio</code> 런타임</td></tr>
+</tbody>
+</table>
 <hr>
 
 <h2>시작하기</h2>
