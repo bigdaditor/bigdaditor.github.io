@@ -56,8 +56,10 @@
                     items.forEach(post => {
                         const li = document.createElement('li');
                         // .md 파일은 뷰어로, .html은 직접 링크
+                        // 경로의 각 세그먼트만 인코딩 (슬래시 유지)
+                        const encodedFile = post.file.split('/').map(encodeURIComponent).join('/');
                         const href = post.file.endsWith('.md')
-                            ? `post.html?file=${encodeURIComponent(post.file)}`
+                            ? `post.html?file=${encodedFile}`
                             : `posts/${post.file}`;
                         li.innerHTML = `<a href="${href}">${post.title}</a><span class="post-date">${post.date}</span>`;
                         ul.appendChild(li);
