@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tauri 설정하기 - bigdaditor's blog</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <!-- GitHub Markdown CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/github-markdown-css/5.5.1/github-markdown-light.min.css">
+    <!-- Highlight.js Theme -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css">
+    <style>
+        .markdown-body {
+            box-sizing: border-box;
+            min-width: 200px;
+            max-width: 980px;
+            margin: 0 auto;
+            padding: 0;
+        }
+        .markdown-body pre {
+            background-color: #f6f8fa;
+        }
+        .markdown-body table {
+            display: table;
+            width: 100%;
+        }
+        .markdown-body blockquote {
+            border-left: 4px solid #d0d7de;
+            padding-left: 1em;
+            color: #656d76;
+        }
+        article {
+            line-height: 1.8;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1><a href="/">bigdaditor's blog</a></h1>
+        <nav>
+            <a href="https://github.com/bigdaditor">GitHub</a>
+        </nav>
+    </header>
+
+    <main>
+        <a href="/" class="back-link">← 목록으로</a>
+        <article id="content" class="markdown-body">
+<p>macOS 기준으로 Rust 설치부터 Tauri 세팅까지 한 번에 정리해보자. 블로그 글처럼 가볍게 읽으면서 따라 하면 된다.</p>
+<h2>1. Rust 설치하기 (rustup 사용)</h2>
+<p>Rust는 공식 버전 관리 도구인 <code>rustup</code>으로 설치하는 게 가장 편하다.</p>
+<pre><code class="language-bash">curl --proto &#39;=https&#39; --tlsv1.2 -sSf https://sh.rustup.rs | sh
+</code></pre>
+<p>설치 후에는 터미널을 새로 열거나 아래를 실행해서 환경변수를 반영한다.</p>
+<pre><code class="language-bash">source &quot;$HOME/.cargo/env&quot;
+</code></pre>
+<p>정상 설치 여부는 이렇게 확인한다.</p>
+<pre><code class="language-bash">rustc --version
+cargo --version
+</code></pre>
+<p>혹시 스크립트 내용을 확인하고 싶다면 아래 링크에서 직접 열어볼 수 있다.</p>
+<p><a href="https://sh.rustup.rs/">https://sh.rustup.rs/</a></p>
+<h2>2. 기본 개발 도구 준비</h2>
+<p>Tauri는 Rust + WebView를 사용하는 데스크톱 앱 프레임워크라서 OS별 의존성이 있다. macOS에서는 Xcode Command Line Tools가 필요하다.</p>
+<pre><code class="language-bash">xcode-select --install
+</code></pre>
+<h2>3. Tauri 프로젝트 세팅</h2>
+<p>Tauri는 <code>create-tauri-app</code>로 시작하는 게 제일 빠르다.</p>
+<pre><code class="language-bash">cargo install create-tauri-app
+cargo create-tauri-app
+</code></pre>
+<p>질문이 나오면 아래처럼 선택하면 무난하다.</p>
+<ul>
+<li>Project name: 원하는 이름</li>
+<li>Package manager: 사용하는 것 선택 (npm, pnpm, yarn 등)</li>
+<li>UI template: 기본 템플릿 (Vanilla/React/Vite 등)</li>
+</ul>
+<p>프로젝트 디렉터리로 이동한 다음, 개발 서버를 띄운다.</p>
+<pre><code class="language-bash">cd &lt;project-name&gt;
+cargo tauri dev
+</code></pre>
+<p>처음 실행 시 Rust 쪽 빌드가 일어나므로 조금 시간이 걸릴 수 있다.</p>
+<h2>4. <code>Cargo.toml</code> 주요 속성 한눈에 보기</h2>
+<p>Tauri 프로젝트의 Rust 설정은 <code>src-tauri/Cargo.toml</code>에 들어있다. 자주 보는 항목을 표로 정리하면 아래와 같다.</p>
+<table>
+<thead>
+<tr>
+<th>섹션/옵션</th>
+<th>설명</th>
+<th>예시</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>package</code></td>
+<td>패키지 메타데이터 묶음</td>
+<td><code>name</code>, <code>version</code>, <code>edition</code></td>
+</tr>
+<tr>
+<td><code>package.name</code></td>
+<td>크레이트 이름</td>
+<td><code>my-tauri-app</code></td>
+</tr>
+<tr>
+<td><code>package.version</code></td>
+<td>버전 정보 (SemVer)</td>
+<td><code>0.1.0</code></td>
+</tr>
+<tr>
+<td><code>package.edition</code></td>
+<td>Rust 에디션</td>
+<td><code>2021</code></td>
+</tr>
+<tr>
+<td><code>dependencies</code></td>
+<td>앱에서 사용하는 라이브러리</td>
+<td><code>tauri</code>, <code>serde</code>, <code>tokio</code></td>
+</tr>
+<tr>
+<td><code>build-dependencies</code></td>
+<td>빌드 스크립트용 라이브러리</td>
+<td><code>tauri-build</code></td>
+</tr>
+<tr>
+<td><code>features</code></td>
+<td>조건부 컴파일 플래그</td>
+<td><code>custom-protocol</code>, <code>tray</code></td>
+</tr>
+<tr>
+<td><code>profile</code></td>
+<td>빌드 최적화 설정</td>
+<td><code>profile.dev</code>, <code>profile.release</code></td>
+</tr>
+<tr>
+<td><code>bin</code></td>
+<td>실행 바이너리 설정</td>
+<td>멀티 바이너리 구성</td>
+</tr>
+</tbody></table>
+<p><code>Cargo.toml</code>은 “Rust 프로젝트 설정 파일”이라고 생각하면 쉽다. Tauri를 쓰더라도 결국 Rust 크레이트이기 때문에 이 파일이 핵심이다.</p>
+
+        </article>
+    </main>
+
+    <footer>
+        <p>&copy; 2026 bigdaditor</p>
+    </footer>
+</body>
+</html>
