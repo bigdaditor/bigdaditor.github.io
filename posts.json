@@ -1,12 +1,18 @@
 [
   {
-    "title": "Tauri 설정하기",
+    "title": "bigdaditor&#39;s blog",
+    "date": "2026-03-03",
+    "category": "Error Note",
+    "file": "Error Note/1.html"
+  },
+  {
+    "title": "bigdaditor's blog",
     "date": "2026-02-04",
     "category": "Rust",
     "file": "Rust/tauri-설정하기.html"
   },
   {
-    "title": "Rust 1시간 속성 가이드 - Java 5년차 개발자용",
+    "title": "bigdaditor's blog",
     "date": "2026-01-26",
     "category": "Rust",
     "file": "Rust/rust-for-java-devs.html"
