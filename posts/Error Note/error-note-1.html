@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Error Note - 1 - bigdaditor&#39;s blog</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <!-- GitHub Markdown CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/github-markdown-css/5.5.1/github-markdown-light.min.css">
+    <!-- Highlight.js Theme -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css">
+    <style>
+        .markdown-body {
+            box-sizing: border-box;
+            min-width: 200px;
+            max-width: 980px;
+            margin: 0 auto;
+            padding: 0;
+        }
+        .markdown-body pre {
+            background-color: #f6f8fa;
+        }
+        .markdown-body table {
+            display: table;
+            width: 100%;
+        }
+        .markdown-body blockquote {
+            border-left: 4px solid #d0d7de;
+            padding-left: 1em;
+            color: #656d76;
+        }
+        article {
+            line-height: 1.8;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1><a href="/">bigdaditor&#39;s blog</a></h1>
+        <nav>
+            <a href="https://github.com/bigdaditor">GitHub</a>
+        </nav>
+    </header>
+
+    <main>
+        <a href="/" class="back-link">← 목록으로</a>
+        <article id="content" class="markdown-body">
+<h1>Nginx Proxy 환경에서 keep-alive가 깨진 이유</h1>
+<h2>Context</h2>
+<h3>Architecture</h3>
+<ul>
+<li>Client: React</li>
+<li>Web Server: nginx</li>
+<li>API Server: FastAPI (Python 3.12)</li>
+<li>DB: MariaDB</li>
+</ul>
+<h3>요청 흐름</h3>
+<pre><code class="language-shell">Client &gt; Web Server &gt; API Server &gt; DB
+</code></pre>
+<h2>Symptom</h2>
+<ul>
+<li><strong>API Server</strong>  URL로  요청을 직접 날렸을 땐 응답이 <strong>DevTools</strong> 에서 3초 내로 왔으나 같은 요청을  <strong>Web Server</strong> 통해서 요청 시 응답 속도가 7초 이상 걸리는 것을 확인</li>
+<li><strong>API Server</strong>와 <strong>DB Connection Pool</strong> 확인 했을 때 유지되고 있는 것을 확인</li>
+<li><strong>DevTools</strong>을 통해 Request Headers에서 <strong>Connection</strong> 값이 <strong>keep-alive</strong> 로 설정된 것을 확인</li>
+</ul>
+<h2>Cause</h2>
+<ul>
+<li>구글링을 통해서 확인한 결과, <strong>Nginx</strong> 에서 proxy request header 설정 시 
+<code>proxy_set_header Connction &quot;&quot;</code> 을 명시하지 않으면 <code>Connection: close</code> 가 <strong>API Server</strong>로 요청이 전달 될 수 있음을 확인</li>
+<li>확인 하기위해 <strong>Nginx</strong> 코드 소스를 확인한 결과 proxy 요청 생성 시 <code>Connection</code> 헤더를 결정하는 로직에서 아래와 같이 <code>close</code> 값이 명시적으로 설정되는 부분을 확인했다.</li>
+</ul>
+<pre><code class="language-c"># src/http/nginx_http_proxy_module.c
+...
+
+static ngx_int_t
+ngx_http_proxy_internal_connection_variable(
+    ngx_http_request_t *r,
+    ngx_http_variable_value_t *v, 
+    uintptr_t data
+)
+{
+
+ngx_http_proxy_ctx_t *ctx;
+
+ctx = ngx_http_get_module_ctx(r, ngx_http_proxy_module);
+
+if (ctx == NULL || !ctx-&gt;legacy) {
+    v-&gt;not_found = 1;
+    return NGX_OK;
+}
+
+v-&gt;valid = 1;
+v-&gt;no_cacheable = 0;
+v-&gt;not_found = 0;
+ngx_str_set(v, &quot;close&quot;);
+
+return NGX_OK;
+
+}
+</code></pre>
+<h2>Fix</h2>
+<ul>
+<li><strong>Nginx</strong> proxy에서 <strong>API Server</strong>로 upstream 요청  시 <code>Connection close</code>  으로 설정하지 못하게 막기 위해 <code>Connection &quot;&quot;</code> 으로 설정<blockquote>
+<p>HTTP/1.1 에서 Connection 헤더는 해당 요청과 응답 이후에 TCP 연결 동작 방식을 지시하는 역할을 한다.  기본값은 HTTP/1.1. 규칙에 따라 연결 유지(keep-alive)로 설정합니다. close는 TCP 응답 완료 후 연결 종료를 지시한다.</p>
+</blockquote>
+</li>
+</ul>
+<h2>Result</h2>
+<ul>
+<li>응답속도를 7초에서 3초 내외로 낮춤</li>
+</ul>
+
+        </article>
+    </main>
+
+    <footer>
+        <p>&copy; 2026 bigdaditor</p>
+    </footer>
+</body>
+</html>
