@@ -23,11 +23,20 @@ async function collectHtmlFiles(directory) {
 }
 
 function extractTitle(content, fallbackTitle) {
-  const match = content.match(/<h1[^>]*>([\s\S]*?)<\/h1>/i);
-  if (!match) {
+  const articleMatch = content.match(/<article\b[^>]*>([\s\S]*?)<\/article>/i);
+  const source = articleMatch ? articleMatch[1] : "";
+  const match = source.match(
+    /<([a-z0-9:-]+)\b[^>]*\bclass=["']([^"']*\bpost\b[^"']*\btitle\b[^"']*|[^"']*\btitle\b[^"']*\bpost\b[^"']*)["'][^>]*>([\s\S]*?)<\/\1>/i
+  );
+  if (match) {
+    return match[3].replace(/<[^>]+>/g, "").trim() || fallbackTitle;
+  }
+
+  const headingMatch = source.match(/<h1\b[^>]*>([\s\S]*?)<\/h1>/i);
+  if (!headingMatch) {
     return fallbackTitle;
   }
-  return match[1].replace(/<[^>]+>/g, "").trim() || fallbackTitle;
+  return headingMatch[1].replace(/<[^>]+>/g, "").trim() || fallbackTitle;
 }
 
 function extractDateFromContent(content) {
